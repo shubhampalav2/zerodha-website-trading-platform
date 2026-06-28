@@ -1,8 +1,3 @@
-.signup-btn {
-    width: 30%;
-    margin: 0 auto;
-}
-
 .hero-img {
     width: 100%;
     /* responsive */
@@ -104,9 +99,6 @@
 }
 
 @media (max-width:700px) {
-    .signup-btn {
-        width: 60%;
-    }
 
     .hero-img {
         width: 100vw;

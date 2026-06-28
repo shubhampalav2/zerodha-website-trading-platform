@@ -10,14 +10,14 @@ export default function Education() {
                     Varsity, the largest online stock market education book in the world
                     covering everything from the basics to advanced trading.
                 </p>
-                <a href="" style={{ textDecoration: "none" }}>
-                    Versity <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                <a href="https://zerodha.com/varsity/" style={{ textDecoration: "none" }} target="_blank">
+                    Varsity <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
                 </a>
                 <p className="mt-5">
                     TradingQ&A, the most active trading and investment community in
                     India for all your market related queries.
                 </p>
-                <a href="" style={{ textDecoration: "none" }}>
+                <a href="https://tradingqna.com/" style={{ textDecoration: "none" }} target="_blank">
                     TradingQ&A <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>

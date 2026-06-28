@@ -5,9 +5,25 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.signup-btn {
+  width: 30%;
+  margin: 0 auto;
+}
+
+.logo-img {
+  width: 25%;
+}
+
+@media (max-width:700px) {
+  .signup-btn {
+    width: 60%;
+  }
 }
