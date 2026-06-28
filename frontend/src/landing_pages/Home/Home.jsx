@@ -4,10 +4,10 @@ import Education from './Sections/Education.jsx';
 import Hero from './Sections/Hero.jsx'
 import Pricing from './Sections/Pricing.jsx';
 import Stats from './Sections/Stats.jsx';
+import './Home.css';
 const Home = () => {
     return (
         <>
-            <h1>Home Page</h1>
             <Hero />
             <Awards />
             <Stats />
