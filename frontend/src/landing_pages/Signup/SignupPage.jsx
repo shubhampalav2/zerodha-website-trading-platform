@@ -1,53 +1,15 @@
-import React from "react";
-
+import React, { useState, useRef } from "react";
+import SignupForm from "./SignupForm";
+import LoginForm from "./LoginForm";
+import "./auth.css";
 const SignupPage = () => {
+    const [authMode, setAuthMode] = useState('signup');
+    const mainRef = useRef(null);
     return (
-        <main className="signup-page">
-            <section className="signup-page__container">
-                <h1 className="signup-page__title">Create your account</h1>
-                <p className="signup-page__subtitle">
-                    Sign up to start trading and manage your portfolio.
-                </p>
-
-                <form className="signup-page__form">
-                    <label className="signup-page__label" htmlFor="name">
-                        Full name
-                    </label>
-                    <input
-                        className="signup-page__input"
-                        id="name"
-                        name="name"
-                        type="text"
-                        placeholder="Enter your name"
-                    />
-
-                    <label className="signup-page__label" htmlFor="email">
-                        Email address
-                    </label>
-                    <input
-                        className="signup-page__input"
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="Enter your email"
-                    />
-
-                    <label className="signup-page__label" htmlFor="password">
-                        Password
-                    </label>
-                    <input
-                        className="signup-page__input"
-                        id="password"
-                        name="password"
-                        type="password"
-                        placeholder="Choose a password"
-                    />
-
-                    <button className="signup-page__button" type="submit">
-                        Sign up
-                    </button>
-                </form>
-            </section>
+        <main className="signup-page mt-5 p-5" ref={mainRef}>
+            {authMode === 'signup' ?
+                <SignupForm setAuthMode={setAuthMode} mainRef={mainRef} />
+                : <LoginForm setAuthMode={setAuthMode} mainRef={mainRef} />}
         </main>
     );
 };

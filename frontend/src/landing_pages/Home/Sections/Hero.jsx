@@ -2,7 +2,7 @@ export default function Hero() {
     function redirect() {
         window.open('https://zerodha.com/open-account', '_target');
     }
-    return <div className="container p-5">
+    return <div className="container p-5 mt-5">
         <div className="row text-center">
             <img src="/images/homeHero.png" alt="Hero Page Image" className="mb-5 hero-img" />
             <h2 className="mt-5">Invest in everything</h2>
