@@ -1,70 +1,210 @@
-# Getting Started with Create React App
+# 🚀 Zerodha Clone
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A responsive **Zerodha Clone** built using **React.js** that replicates the core landing pages of the Zerodha website. The project focuses on reusable components, responsive design, React Router navigation, and modern frontend development practices.
 
-## Available Scripts
+## 🔥 Tech Stack
 
-In the project directory, you can run:
+- React.js
+- JavaScript (ES6+)
+- React Router DOM
+- React Hook Form
+- Bootstrap 5
+- HTML5
+- CSS3
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## ✨ Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Fully Responsive UI
+- Reusable Components
+- React Router Navigation
+- Modern Bootstrap Layout
+- Clean Folder Structure
+- Login & Signup Forms
+- Responsive Navbar & Footer
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📄 Pages
 
-### `npm run build`
+### 🏠 Home Page
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Hero Section
+- Awards Section
+- Stats
+- Ecosystem
+- Pricing Overview
+- Open Account CTA
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![Home](image.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+![Home](image-1.png)
 
-### `npm run eject`
+![Home](image-2.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+![Home](image-3.png)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+![Home](image-4.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 📝 Signup Page
 
-## Learn More
+Responsive signup form built using React Hook Form.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![Signup](image-5.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+### 🔐 Login Page
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Simple login page with responsive design.
 
-### Analyzing the Bundle Size
+![Login](image-6.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+### 👨‍💼 About Page
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Contains company information, mission, and statistics.
 
-### Advanced Configuration
+![About](image-7.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+### 💻 Products Page
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Displays Zerodha products with reusable product components.
 
-### `npm run build` fails to minify
+![Products](image-8.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![Products](image-9.png)
+
+---
+
+### 💰 Pricing Page
+
+Responsive pricing cards and brokerage information.
+
+![Pricing](image-10.png)
+
+---
+
+### 🎧 Support Page
+
+Custom-designed support portal with responsive layout.
+
+![Support](image-11.png)
+
+---
+
+## 📂 Project Structure
+
+```text
+src
+│
+├── components
+│   ├── Navbar
+│   ├── Footer
+│   ├── Hero
+│   ├── OpenAccount
+│   ├── Pricing
+│   ├── Awards
+│   ├── Stats
+│   └── ...
+│
+├── pages
+│   ├── Home
+│   ├── About
+│   ├── Products
+│   ├── Pricing
+│   ├── Support
+│   ├── Signup
+│   └── Login
+│
+├── App.jsx
+└── main.jsx
+```
+
+---
+
+## 🚀 Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/your-username/zerodha-clone.git
+```
+
+Move to project folder
+
+```bash
+cd zerodha-clone
+```
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Start development server
+
+```bash
+npm run dev
+```
+
+---
+
+## 🎯 Upcoming Features
+
+- Node.js + Express Backend
+- MongoDB Database Integration
+- JWT Authentication
+- User Signup & Login APIs
+- Protected Routes
+- Dashboard
+- Holdings
+- Positions
+- Orders
+- Funds
+- Buy & Sell Stocks
+- Portfolio Analytics
+- Charts & Graphs
+- Profile Management
+- Watchlist
+- Search Stocks
+
+---
+
+## 💡 Learning Outcomes
+
+This project helped me understand:
+
+- React Component Architecture
+- Reusable Components
+- React Router DOM
+- Responsive Design using Bootstrap
+- React Hook Form
+- Project Structuring
+- State Management using Hooks
+- Form Validation
+- Clean UI Development
+
+---
+
+## 📌 Future Scope
+
+This project is currently focused on the frontend. The next phase will involve building a complete **full-stack Zerodha Clone** using:
+
+- React
+- Node.js
+- Express.js
+- MongoDB
+- JWT Authentication
+- REST APIs
+
+---
+
+## ⭐ If you like this project, don't forget to give it a Star!
