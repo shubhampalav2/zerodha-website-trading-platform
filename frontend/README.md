@@ -152,7 +152,7 @@ npm install
 Start development server
 
 ```bash
-npm run dev
+npm run start
 ```
 
 ---
