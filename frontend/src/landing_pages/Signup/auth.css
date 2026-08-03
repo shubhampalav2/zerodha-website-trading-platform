@@ -70,6 +70,11 @@
     color: #2f6fb9;
 }
 
+.err-msg {
+    font-size: 0.90rem;
+    color: crimson;
+}
+
 @media (max-width: 768px) {
 
     .auth-card {
@@ -78,6 +83,10 @@
 
     .auth-title {
         font-size: 1.8rem;
+    }
+
+    .err-msg {
+        font-size: 1rem;
     }
 }
 

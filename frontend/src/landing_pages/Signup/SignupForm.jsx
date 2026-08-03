@@ -1,4 +1,36 @@
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import RegexStore from "../../utils/RegexStore";
 const SignupForm = ({ setAuthMode, mainRef }) => {
+
+    //creating a singup schema
+    const signupSchema = yup.object({
+        fullName: yup.string().required("This field is mandatory").matches(RegexStore.fullNameRegex, "Please enter valid full name as (Ajay Raj)"),
+        email: yup.string().required("This field is mandatory").matches(RegexStore.emailRegex, "Enter a valid email address (e.g. name@example.com)."),
+        password: yup.string().required("This field is mandatory").matches(RegexStore.passwordRegex, "Enter a strong password with at least 8 characters, including an uppercase letter, a lowercase letter, a number, and a special character."),
+        conformPassword: yup.string().required("This field is mandatory").oneOf([yup.ref("password")], "Password and Confirm Password must match"),
+        mobileNumber: yup.string().required("This field is mandatory").matches(RegexStore.mobileRegex, "Please enter valid mobile number")
+    });
+
+    const { register, reset, handleSubmit, formState: {
+        errors
+    } } = useForm({
+        defaultValues: {
+            fullName: "",
+            mobileNumber: "",
+            password: "",
+            conformPassword: "",
+            email: ""
+        },
+        mode: "onChange",
+        resolver: yupResolver(signupSchema)
+    })
+
+    function submit(data) {
+        console.log(data);
+    }
+
     return <div className="auth-container">
         <div className="auth-card">
             <h2 className="auth-title">Create Account</h2>
@@ -6,7 +38,7 @@ const SignupForm = ({ setAuthMode, mainRef }) => {
                 Start your investment journey with Zerodha
             </p>
 
-            <form>
+            <form onSubmit={handleSubmit(submit)}>
                 <div className="mb-3">
                     <label className="form-label" htmlFor="name">Full Name</label>
                     <input
@@ -15,7 +47,9 @@ const SignupForm = ({ setAuthMode, mainRef }) => {
                         placeholder="Enter your full name"
                         id="name"
                         autoComplete="off"
+                        {...register("fullName")}
                     />
+                    <span className="err-msg">{errors?.fullName?.message}</span>
                 </div>
 
                 <div className="mb-3">
@@ -26,7 +60,9 @@ const SignupForm = ({ setAuthMode, mainRef }) => {
                         placeholder="Enter your email"
                         id="email"
                         autoComplete="off"
+                        {...register("email")}
                     />
+                    <span className="err-msg">{errors?.email?.message}</span>
                 </div>
 
                 <div className="mb-3">
@@ -37,7 +73,10 @@ const SignupForm = ({ setAuthMode, mainRef }) => {
                         placeholder="Enter your mobile number"
                         id="number"
                         autoComplete="off"
+                        {...register("mobileNumber")}
+                        maxLength={10}
                     />
+                    <span className="err-msg">{errors?.mobileNumber?.message}</span>
                 </div>
 
                 <div className="mb-3">
@@ -48,7 +87,9 @@ const SignupForm = ({ setAuthMode, mainRef }) => {
                         placeholder="Create a password"
                         id="password"
                         autoComplete="off"
+                        {...register("password")}
                     />
+                    <span className="err-msg">{errors?.password?.message}</span>
                 </div>
 
                 <div className="mb-4">
@@ -59,7 +100,9 @@ const SignupForm = ({ setAuthMode, mainRef }) => {
                         placeholder="Confirm your password"
                         id="conformPassword"
                         autoComplete="off"
+                        {...register("conformPassword")}
                     />
+                    <span className="err-msg">{errors?.conformPassword?.message}</span>
                 </div>
 
                 <button type="submit" className="btn auth-btn">
