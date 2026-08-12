@@ -4,3 +4,5 @@ const RegexStore = {
     passwordRegex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#()_+\-=[\]{};':"\\|,.<>/?])[A-Za-z\d@$!%*?&^#()_+\-=[\]{};':"\\|,.<>/?]{8,}$/,
     mobileRegex: /^[6789][0-9]{9}$/,
 }
+
+module.exports = RegexStore;
