@@ -47,3 +47,11 @@ async function startServer() {
 }
 
 startServer();
+
+//invalid route middleware
+app.use((req, res) => {
+    return res.status(404).json({
+        success: false,
+        message: "The resource your are trying to look does not exist on our server"
+    })
+})
