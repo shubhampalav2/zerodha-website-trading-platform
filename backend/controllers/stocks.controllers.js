@@ -1,12 +1,21 @@
+const jwt = require("jsonwebtoken");
+
 const Stock = require("../models/StockModel");
+
+const dotenv = require('dotenv')
+
+dotenv.config();
+
 const getStocks = async (req, res) => {
     try {
         //Fetching the data from the database
         const stocks = await Stock.find();
         if (!stocks) {
-            return res.status(400).json({
+            return res.status(204).json({
                 success: false,
-                message: "Data Not Found"
+                message: "Data Not Found",
+                stocks: [],
+                count: 0
             })
         }
         return res.status(200).json({

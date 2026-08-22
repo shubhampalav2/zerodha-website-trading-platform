@@ -4,6 +4,6 @@ const getStocks = require("../controllers/stocks.controllers");
 
 const router = express.Router();
 
-router.get("/", getStocks);
+router.get("/stocks", getStocks);
 
 module.exports = router;

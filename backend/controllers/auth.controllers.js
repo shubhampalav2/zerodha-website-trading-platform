@@ -1,7 +1,17 @@
 const RegexStore = require("../utils/RegexStore");
 const User = require("../models/UserModel");
+
+const bcrypt = require("bcrypt");
+
+const jwt = require("jsonwebtoken");
+
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+
 const loginHandler = async (req, res) => {
-    console.log("Request is ", req.body);
+    console.log("Request is ", req.headers);
     const { email, password } = req.body;
     //validations
     if (!email || !password) {
@@ -32,19 +42,42 @@ const loginHandler = async (req, res) => {
 
         //If user not present in database
         if (!user) {
-            return res.status(422).json({
-                message: "Invalid credentials Please correct username and password",
+            return res.status(401).json({
+                message: "Invalid credentials.Please enter correct username and password",
                 success: false
             })
         }
 
+        const isSamePassword = await bcrypt.compare(password, user.password);
+
+        //If password is incorrect,password does not match
+        if (!isSamePassword) {
+            return res.status(401).json({
+                message: "Invalid credentials Please enter correct username and password",
+                success: false
+            })
+        }
+        const payload = {
+            username: user.userName,
+            id: user._id
+        }
+        //Creating a jwt token
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "8h"
+        })
+
+        res.cookie("tokenCookie", token, {
+            httpOnly: true,
+            expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000)
+        })
         res.status(200).json({
             success: true,
-            message: "Successfully Login"
+            message: "User Logged in Successfully",
+            authToken: token
         });
     }
     catch (err) {
-
+        console.log(err);
         res.status(500).send("Something Went Wrong");
     }
 };
@@ -91,17 +124,30 @@ const signUpHandler = async (req, res) => {
             })
         }
 
+        //hash the password
+        let hashedPassword = await bcrypt.hash(password, 10);
         //Create a new user and store that in the database
-        await User.create({
+        const data = await User.create({
             userName: email,
-            password,
+            password: hashedPassword,
             mobileNumber,
             fullName
         })
 
+        // Create a jwt token
+        const payload = {
+            userName: email,
+            userId: data._id
+        }
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "8h"
+        });
+
         return res.status(200).json({
             success: true,
-            message: "User successfully registered to Zerodha account"
+            message: "User successfully registered to Zerodha account",
+            authToken: token
         })
     }
     catch (err) {
