@@ -1,5 +1,3 @@
-const jwt = require("jsonwebtoken");
-
 const Stock = require("../models/StockModel");
 
 const dotenv = require('dotenv')
