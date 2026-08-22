@@ -23,6 +23,13 @@ const getStocks = async (req, res) => {
         }
         page = Number(page) || 1;
         limit = Number(limit) || 10;
+
+        if (pageNumber < 1 || limitNumber < 1) {
+            return res.status(400).json({
+                success: false,
+                message: "Page and limit must be greater than 0"
+            });
+        }
         //Fetching the data from the database
         const stocks = await Stock.find();
         if (!stocks) {
