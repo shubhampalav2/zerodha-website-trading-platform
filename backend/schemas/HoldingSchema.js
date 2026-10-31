@@ -21,15 +21,7 @@ const HoldingSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true
-    },
-    net: {
-        type: String,
-        required: true
-    },
-    day: {
-        type: String,
-        required: true
-    },
+    }
 });
 
 module.exports = HoldingSchema;

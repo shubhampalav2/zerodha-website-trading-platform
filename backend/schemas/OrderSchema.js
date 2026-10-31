@@ -16,14 +16,18 @@ const OrderSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        required: true
+        required: true,
     },
     type: {
         type: String,
-        required: true
+        required: true,
     },
     status: {
         type: String,
+        required: true
+    },
+    timestamp: {
+        type: Date,
         required: true
     }
 });

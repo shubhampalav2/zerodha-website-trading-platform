@@ -5,12 +5,15 @@ const { dbConnection } = require("./config/dbConnect");
 
 const authRoutes = require("./routes/auth.routes");
 const stockRoutes = require("./routes/stocks.routes");
+const orderRoutes = require("./routes/order.routes");
+const holdingRoutes = require("./routes/holding.routes");
 
 //Loading all the configurations in the process object
 dotenv.config();
 
 //Initialize the server
 const app = express();
+
 
 //Using middleware to parse json data
 app.use(express.json());
@@ -23,9 +26,10 @@ app.use("/api/v1/dashboard", authMiddleware)
 //Mount the API's
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/dashboard', stockRoutes);
+app.use('/api/v1/dashboard', orderRoutes);
+app.use('/api/v1/dashboard', holdingRoutes);
 
 const port = process.env.PORT || process.env.port || 3000;
-
 
 //Default route
 app.get('/', (req, res) => {

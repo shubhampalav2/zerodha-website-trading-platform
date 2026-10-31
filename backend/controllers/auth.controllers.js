@@ -59,7 +59,7 @@ const loginHandler = async (req, res) => {
         }
         const payload = {
             username: user.userName,
-            id: user._id
+            userId: user._id
         }
         //Creating a jwt token
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -136,7 +136,8 @@ const signUpHandler = async (req, res) => {
 
         // Create a jwt token
         const payload = {
-            userName: email,
+            userName: fullName,
+            email: email,
             userId: data._id
         }
 

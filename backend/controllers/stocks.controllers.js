@@ -24,7 +24,7 @@ const getStocks = async (req, res) => {
         page = Number(page) || 1;
         limit = Number(limit) || 10;
 
-        if (pageNumber < 1 || limitNumber < 1) {
+        if (page < 1 || limit < 1) {
             return res.status(400).json({
                 success: false,
                 message: "Page and limit must be greater than 0"

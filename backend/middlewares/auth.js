@@ -10,8 +10,9 @@ const authMiddleware = (req, res, next) => {
             });
         }
         //verifying the authenticity
-        jwt.verify(token, process.env.JWT_SECRET);
-        console.log("User is authenticated");
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
+        console.log("User is authenticated ", decoded);
         //If user is successfully authenticated then call the next
         next();
     }
