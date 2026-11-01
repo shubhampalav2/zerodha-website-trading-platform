@@ -6,7 +6,7 @@ const fetchOrders = async (req, res) => {
     console.log("User id ", req.user.userId);
     try {
         //Extracting page and limit from request query
-        let { page, limit } = req.query;
+        let { page, limit, status } = req.query;
         //validations
         if (!page || !limit) {
             return res.status(400).json({
@@ -20,6 +20,12 @@ const fetchOrders = async (req, res) => {
                 message: "Page and limit must contain numbers only"
             });
         }
+        if (!status) {
+            return res.status(422).json({
+                success: false,
+                message: "Status is required"
+            });
+        }
         page = Number(page) || 1;
         limit = Number(limit) || 10;
 
@@ -31,7 +37,7 @@ const fetchOrders = async (req, res) => {
         }
         const offset = (page - 1) * limit;
         //Fetching the orders for particular user and counting the total orders
-        const [orders, totalOrders] = await Promise.all([Order.find({ userId: id }).skip(offset).limit(limit),
+        const [orders, totalOrders] = await Promise.all([Order.find({ userId: id, status }).skip(offset).limit(limit),
         Order.countDocuments({ userId: id })]);
 
         if (totalOrders === 0) {
