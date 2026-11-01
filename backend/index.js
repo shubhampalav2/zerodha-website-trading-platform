@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const cors = require("cors");
 
 const { dbConnection } = require("./config/dbConnect");
 
@@ -14,6 +15,9 @@ dotenv.config();
 
 //Initialize the server
 const app = express();
+
+//using middleware for enabling the cors
+app.use(cors());
 
 
 //Using middleware to parse json data
