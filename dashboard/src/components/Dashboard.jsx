@@ -9,22 +9,24 @@ import Positions from "./Positions";
 import Summary from "./Summary";
 import WatchList from "./WatchList";
 import { GeneralContextProvider } from "./GeneralContext";
+import "./dashboard.css";
 
 const Dashboard = () => {
     return (
         <div className="dashboard-container">
             <GeneralContextProvider>
                 <WatchList />
+
+                <div className="content">
+                    <Routes>
+                        <Route exact path="/" element={<Summary />} />
+                        <Route path="/orders" element={<Orders />} />
+                        <Route path="/holdings" element={<Holdings />} />
+                        <Route path="/positions" element={<Positions />} />
+                        <Route path="/funds" element={<Funds />} />
+                    </Routes>
+                </div>
             </GeneralContextProvider>
-            <div className="content">
-                <Routes>
-                    <Route exact path="/" element={<Summary />} />
-                    <Route path="/orders" element={<Orders />} />
-                    <Route path="/holdings" element={<Holdings />} />
-                    <Route path="/positions" element={<Positions />} />
-                    <Route path="/funds" element={<Funds />} />
-                </Routes>
-            </div>
         </div>
     );
 };

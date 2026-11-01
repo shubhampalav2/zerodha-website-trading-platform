@@ -1,0 +1,461 @@
+.summary-container {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 30px;
+    color: #444444;
+    background: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Page Header */
+
+.summary-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 28px;
+}
+
+.summary-breadcrumb {
+    margin: 0 0 10px;
+    color: #999999;
+    font-size: 12px;
+}
+
+.summary-page-header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.summary-subtitle {
+    margin: 8px 0 0;
+    color: #999999;
+    font-size: 13px;
+}
+
+.summary-market-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #777777;
+    font-size: 11px;
+}
+
+.summary-market-status span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #26a69a;
+}
+
+/* Main Portfolio Card */
+
+.summary-portfolio-card {
+    padding: 26px;
+    border: 1px solid #eeeeee;
+    border-radius: 4px;
+    background: #ffffff;
+}
+
+.summary-portfolio-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.summary-label {
+    margin: 0 0 12px;
+    color: #999999;
+    font-size: 13px;
+}
+
+.summary-portfolio-top h2 {
+    margin: 0;
+    color: #444444;
+    font-size: 30px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.summary-return-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 12px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.summary-return-badge.profit {
+    background: #e8f5e9;
+    color: #26a69a;
+}
+
+.summary-return-badge.loss {
+    background: #ffebee;
+    color: #f44336;
+}
+
+.summary-portfolio-divider {
+    height: 1px;
+    margin: 25px 0;
+    background: #eeeeee;
+}
+
+.summary-portfolio-details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.summary-portfolio-details div {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.summary-portfolio-details span {
+    color: #999999;
+    font-size: 12px;
+}
+
+.summary-portfolio-details strong {
+    color: #555555;
+    font-size: 15px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.profit-text {
+    color: #26a69a !important;
+}
+
+.loss-text {
+    color: #f44336 !important;
+}
+
+/* Statistics */
+
+.summary-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 22px;
+}
+
+.summary-stat-card {
+    min-width: 0;
+    padding: 21px;
+    border: 1px solid #eeeeee;
+    border-radius: 4px;
+    background: #ffffff;
+    transition: border-color 0.2s ease;
+}
+
+.summary-stat-card:hover {
+    border-color: #ffb199;
+}
+
+.summary-stat-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.summary-stat-heading>span {
+    color: #999999;
+    font-size: 12px;
+}
+
+.summary-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #fff3ed;
+    color: #ff5722;
+    font-size: 17px;
+}
+
+.summary-stat-icon.profit-icon {
+    background: #e8f5e9;
+    color: #26a69a;
+}
+
+.summary-stat-icon.loss-icon {
+    background: #ffebee;
+    color: #f44336;
+}
+
+.summary-stat-card h3 {
+    margin: 20px 0 8px;
+    color: #444444;
+    font-size: 21px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.summary-stat-card p {
+    margin: 0;
+    color: #aaaaaa;
+    font-size: 11px;
+}
+
+/* Holdings Table */
+
+.summary-holdings-section,
+.summary-performance-section {
+    margin-top: 24px;
+    border: 1px solid #eeeeee;
+    border-radius: 4px;
+    background: #ffffff;
+}
+
+.summary-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 19px 21px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.summary-section-header h3 {
+    margin: 0;
+    color: #555555;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.summary-section-header p {
+    margin: 6px 0 0;
+    color: #999999;
+    font-size: 11px;
+}
+
+.summary-section-header>span {
+    color: #999999;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.summary-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.summary-holdings-table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+.summary-holdings-table th {
+    padding: 15px 18px;
+    background: #fafafa;
+    color: #999999;
+    font-size: 11px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.summary-holdings-table td {
+    padding: 17px 18px;
+    border-bottom: 1px solid #eeeeee;
+    color: #555555;
+    font-size: 12px;
+}
+
+.summary-stock-name {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.summary-stock-name strong {
+    color: #444444;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.summary-stock-name span {
+    color: #999999;
+    font-size: 10px;
+}
+
+.summary-holdings-table td small {
+    display: block;
+    margin-top: 5px;
+    font-size: 10px;
+}
+
+/* Performance */
+
+.summary-performance-content {
+    padding: 22px;
+}
+
+.summary-performance-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.summary-performance-label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #777777;
+    font-size: 12px;
+}
+
+.summary-performance-item strong {
+    color: #555555;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: right;
+}
+
+.investment-dot,
+.current-value-dot {
+    width: 9px;
+    height: 9px;
+    flex-shrink: 0;
+    border-radius: 50%;
+}
+
+.investment-dot {
+    background: #ff5722;
+}
+
+.current-value-dot {
+    background: #387ed1;
+}
+
+.summary-performance-bar {
+    width: 100%;
+    height: 8px;
+    margin-bottom: 22px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #f2f2f2;
+}
+
+.summary-investment-bar {
+    height: 100%;
+    border-radius: inherit;
+    background: #ff5722;
+}
+
+.summary-current-bar {
+    height: 100%;
+    border-radius: inherit;
+    background: #387ed1;
+}
+
+/* Tablet */
+
+@media (max-width: 1024px) {
+    .summary-container {
+        padding: 24px;
+    }
+
+    .summary-stat-card {
+        padding: 17px;
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+    .summary-container {
+        padding: 20px 16px;
+    }
+
+    .summary-page-header {
+        align-items: flex-start;
+    }
+
+    .summary-page-header h1 {
+        font-size: 21px;
+    }
+
+    .summary-portfolio-card {
+        padding: 20px;
+    }
+
+    .summary-portfolio-top h2 {
+        font-size: 25px;
+    }
+
+    .summary-portfolio-details {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .summary-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .summary-stat-card {
+        padding: 15px;
+    }
+
+    .summary-stat-card h3 {
+        font-size: 18px;
+    }
+
+    .summary-holdings-table {
+        min-width: 650px;
+    }
+}
+
+/* Small Mobile */
+
+@media (max-width: 420px) {
+    .summary-container {
+        padding: 16px 12px;
+    }
+
+    .summary-page-header {
+        flex-direction: column;
+    }
+
+    .summary-portfolio-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .summary-portfolio-card {
+        padding: 17px;
+    }
+
+    .summary-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-stat-card h3 {
+        font-size: 20px;
+    }
+
+    .summary-section-header {
+        padding: 16px;
+    }
+
+    .summary-performance-content {
+        padding: 16px;
+    }
+}

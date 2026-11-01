@@ -1,5 +1,23 @@
-body {
+/* =========================
+   GLOBAL STYLES
+========================= */
+
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
         'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
         sans-serif;
@@ -12,21 +30,40 @@ code {
         monospace;
 }
 
+/* =========================
+   DASHBOARD LAYOUT
+========================= */
+
 .dashboard-container {
     width: 100%;
     height: 90vh;
     display: flex;
     align-items: center;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .content {
     flex-basis: 68%;
     height: 100%;
+    min-height: 0;
+    min-width: 0;
     box-sizing: border-box;
     overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     padding: 3% 2%;
 }
+
+.content::-webkit-scrollbar,
+.watchlist-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* =========================
+   FUNDS
+========================= */
 
 .funds {
     width: 100%;
@@ -44,9 +81,11 @@ code {
 
 .btn {
     text-decoration: none;
+    background: rgb(77, 77, 248);
     padding: 10px 20px;
     border-radius: 2px;
     color: #fff;
+    margin-top: 2%;
     margin-right: 2px;
     margin-left: 2px;
 }
@@ -59,16 +98,33 @@ code {
     background: #4184f3;
 }
 
+.btn:hover {
+    background: rgb(110, 110, 253);
+}
+
+.btn-blue:hover {
+    background: #74a7fa;
+}
+
+.btn-green:hover {
+    background: #7bdd7f;
+}
+
+/* =========================
+   ROW AND COLUMN
+========================= */
+
 .row {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     margin-top: 5%;
 }
 
 .col {
-    flex-basis: 48%;
+    flex-basis: 33%;
+    min-width: 0;
     text-align: left;
 }
 
@@ -78,19 +134,44 @@ code {
     margin-bottom: 2%;
 }
 
-.section-icon {
-    transform: scale(0.8);
-    color: rgb(66, 56, 56);
-    padding: 0;
-    margin: 0;
-    margin-right: 10px;
-}
-
 .col span p {
     display: inline-block;
     font-size: 1.2rem;
     font-weight: 300;
 }
+
+.col h5 {
+    font-size: 1.8rem;
+    color: rgb(71, 71, 71);
+    font-weight: 300;
+}
+
+.col h5 span {
+    font-weight: 300;
+    font-size: 0.9rem;
+}
+
+.col p {
+    font-size: 0.8rem;
+    color: rgb(153, 153, 153);
+    font-weight: 300;
+    margin-top: 2%;
+}
+
+.row .col:last-child h5 {
+    color: rgb(72, 194, 55);
+}
+
+.section-icon {
+    transform: scale(0.8);
+    color: rgb(66, 56, 56);
+    padding: 0;
+    margin: 0 10px 0 0;
+}
+
+/* =========================
+   TABLE
+========================= */
 
 .table {
     border: 1px solid #ddd;
@@ -138,14 +219,9 @@ code {
     color: #c9c9c9;
 }
 
-/* sudo selectors */
-.btn-blue:hover {
-    background: #74a7fa;
-}
-
-.btn-green:hover {
-    background: #7bdd7f;
-}
+/* =========================
+   TITLES
+========================= */
 
 .title {
     font-size: 1.3rem;
@@ -154,235 +230,9 @@ code {
     margin-bottom: 2%;
 }
 
-.order-table table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.order-table tr {
-    border-top: 1px solid #f1f1f1;
-    border-bottom: 1px solid #f1f1f1;
-}
-
-.order-table th {
-    text-align: right;
-    padding: 15px 10px;
-    color: rgb(145, 145, 145);
-    font-weight: 300;
-    font-size: 0.8rem;
-}
-
-.order-table tr th:first-child,
-.order-table tr td:first-child {
-    text-align: left;
-}
-
-.order-table tr th:nth-child(1),
-.order-table tr th:nth-child(4) {
-    border-right: 1px solid #f1f1f1;
-}
-
-.order-table tr td:nth-child(1),
-.order-table tr td:nth-child(4) {
-    border-right: 1px solid #f1f1f1;
-}
-
-.order-table tr td:last-child {
-    font-size: 0.6rem;
-}
-
-.order-table td {
-    padding: 10px 10px;
-    text-align: right;
-    font-weight: 400;
-    font-size: 0.9rem;
-    color: rgb(73, 73, 73);
-}
-
-.align-left {
-    text-align: left;
-}
-
-.order-table td.profit {
-    color: rgb(72, 194, 55);
-}
-
-.order-table td.loss {
-    color: rgb(250, 118, 78);
-}
-
-.row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 5%;
-}
-
-.col {
-    flex-basis: 33%;
-}
-
-.col h5 {
-    font-size: 1.8rem;
-    color: rgb(71, 71, 71);
-    font-weight: 300;
-}
-
-.col h5 span {
-    font-weight: 300;
-    font-size: 0.9rem;
-}
-
-.col p {
-    font-size: 0.8rem;
-    color: rgb(153, 153, 153);
-    font-weight: 300;
-    margin-top: 2%;
-}
-
-.row .col:last-child h5 {
-    color: rgb(72, 194, 55);
-}
-
-/* sudo selector */
-.item:hover {
-    cursor: pointer;
-}
-
-.menu-container {
-    flex-basis: 68%;
-    height: 100%;
-    padding: 10px 20px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.logo {
-    width: 30px;
-    height: 20px;
-}
-
-.menus {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-}
-
-.menus ul {
-    list-style-type: none;
-}
-
-.menus li {
-    display: inline-block;
-    margin-right: 30px;
-    text-decoration: none;
-}
-
-.menu {
-    font-size: 0.8rem;
-    font-weight: 400;
-    color: rgb(70, 70, 70);
-}
-
-.menu.selected {
-    color: rgb(245, 104, 52);
-}
-
-hr {
-    border-left: 0.8px solid rgb(243, 242, 242);
-    height: 30px;
-}
-
-.profile {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    margin-left: 20px;
-}
-
-.profile .avatar {
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    position: relative;
-    font-size: 0.7rem;
-    font-weight: 400;
-    color: rgb(221, 139, 221);
-    justify-content: center;
-    align-items: center;
-    border-radius: 100%;
-    text-align: center;
-    display: flex;
-    background: rgb(252, 229, 252);
-    margin-right: 8px;
-}
-
-.profile .username {
-    font-size: 0.8rem;
-    font-weight: 300;
-}
-
-/* sudo selectors */
-
-.menu:hover {
-    color: rgb(245, 104, 52);
-}
-
-.profile:hover {
-    cursor: pointer;
-}
-
-.profile:hover .username {
-    cursor: pointer;
-    color: rgb(223, 91, 43);
-}
-
-.orders {
-    width: 100%;
-    height: 90vh;
-}
-
-.no-orders {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.no-orders .icon {
-    transform: scale(4);
-    color: rgb(173, 173, 173);
-    display: block;
-}
-
-.no-orders p {
-    margin-top: 6%;
-    color: rgb(173, 173, 173);
-    font-size: 1rem;
-    font-weight: 300;
-}
-
-.btn {
-    text-decoration: none;
-    background: rgb(77, 77, 248);
-    padding: 10px 20px;
-    border-radius: 2px;
-    color: #fff;
-    margin-top: 2%;
-}
-
-.btn:hover {
-    background: rgb(110, 110, 253);
-}
-
-.title {
-    font-size: 1.3rem;
-    font-weight: 300;
-    color: rgb(71, 71, 71);
-    margin-bottom: 2%;
-}
+/* =========================
+   ORDER TABLE
+========================= */
 
 .order-table table {
     width: 100%;
@@ -405,6 +255,13 @@ hr {
 .order-table tr th:first-child,
 .order-table tr td:first-child {
     text-align: left;
+}
+
+.order-table tr th:nth-child(1),
+.order-table tr th:nth-child(4),
+.order-table tr td:nth-child(1),
+.order-table tr td:nth-child(4) {
+    border-right: 1px solid #f1f1f1;
 }
 
 .order-table tr td:first-child p {
@@ -439,43 +296,38 @@ hr {
     color: rgb(250, 118, 78);
 }
 
-.row {
+/* =========================
+   ORDERS
+========================= */
+
+.orders {
+    width: 100%;
+    height: 90vh;
+}
+
+.no-orders {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    margin-top: 5%;
+    justify-content: center;
 }
 
-.col {
-    flex-basis: 33%;
+.no-orders .icon {
+    transform: scale(4);
+    color: rgb(173, 173, 173);
+    display: block;
 }
 
-.col h5 {
-    font-size: 1.8rem;
-    color: rgb(71, 71, 71);
+.no-orders p {
+    margin-top: 6%;
+    color: rgb(173, 173, 173);
+    font-size: 1rem;
     font-weight: 300;
 }
 
-.col h5 span {
-    font-weight: 300;
-    font-size: 0.9rem;
-}
-
-.col p {
-    font-size: 0.8rem;
-    color: rgb(153, 153, 153);
-    font-weight: 300;
-    margin-top: 2%;
-}
-
-.row .col:last-child h5 {
-    color: rgb(72, 194, 55);
-}
-
-/* sudo selector */
-.item:hover {
-    cursor: pointer;
-}
+/* =========================
+   HOLDINGS / POSITIONS
+========================= */
 
 .username h6 {
     font-size: 1.5rem;
@@ -488,8 +340,7 @@ hr {
     border: none;
     background: #d1d1d1;
     height: 1px;
-    margin: 20px 0;
-    margin-bottom: 5%;
+    margin: 20px 0 5%;
 }
 
 .section {
@@ -512,8 +363,7 @@ hr {
     transform: scale(0.8);
     color: rgb(112, 112, 112);
     padding: 0;
-    margin: 0;
-    margin-right: 10px;
+    margin: 0 10px 0 0;
 }
 
 .data {
@@ -566,6 +416,10 @@ hr {
     margin-top: 6%;
 }
 
+/* =========================
+   TOPBAR
+========================= */
+
 .topbar-container {
     width: 100%;
     height: 10vh;
@@ -574,6 +428,7 @@ hr {
     box-shadow: 0px 0px 4px 2px rgb(236, 235, 235);
     box-sizing: border-box;
     z-index: 9;
+    position: relative;
 }
 
 .indices-container {
@@ -627,17 +482,111 @@ hr {
     color: rgb(146, 146, 146);
 }
 
-/* sudo selectors */
 .index:hover {
     cursor: pointer;
 }
 
+/* =========================
+   MENU
+========================= */
+
+.menu-container {
+    flex-basis: 68%;
+    height: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    width: 30px;
+    height: 20px;
+}
+
+.menus {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.menus ul {
+    list-style-type: none;
+}
+
+.menus li {
+    display: inline-block;
+    margin-right: 30px;
+    text-decoration: none;
+}
+
+.menu {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: rgb(70, 70, 70);
+}
+
+.menu.selected {
+    color: rgb(245, 104, 52);
+}
+
+.menu:hover {
+    color: rgb(245, 104, 52);
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-left: 20px;
+}
+
+.profile .avatar {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    position: relative;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: rgb(221, 139, 221);
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    display: flex;
+    background: rgb(252, 229, 252);
+    margin-right: 8px;
+}
+
+.profile .username {
+    font-size: 0.8rem;
+    font-weight: 300;
+}
+
+.profile:hover {
+    cursor: pointer;
+}
+
+.profile:hover .username {
+    cursor: pointer;
+    color: rgb(223, 91, 43);
+}
+
+/* =========================
+   WATCHLIST
+========================= */
+
 .watchlist-container {
     flex-basis: 32%;
     height: 100%;
+    min-height: 0;
+    min-width: 0;
     box-sizing: border-box;
-    box-shadow: 0px 0px 4px 1px rgb(236, 235, 235);
+    box-shadow: 0px 0px 4px 1px #ecebeb;
     overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     position: relative;
 }
 
@@ -655,7 +604,7 @@ hr {
     padding: 15px 20px;
     font-size: 0.9rem;
     font-weight: 400;
-    color: rgb(241, 241, 241);
+    color: rgb(80, 80, 80);
     border-bottom: 0.8px solid rgb(235, 234, 234);
 }
 
@@ -687,6 +636,10 @@ hr {
     position: relative;
 }
 
+.item:hover {
+    cursor: pointer;
+}
+
 .item-info {
     display: flex;
     justify-content: space-evenly;
@@ -712,6 +665,10 @@ hr {
     color: rgb(223, 73, 73);
     flex: 1;
 }
+
+/* =========================
+   WATCHLIST ACTIONS
+========================= */
 
 .actions {
     position: absolute;
@@ -759,17 +716,41 @@ hr {
     color: rgb(65, 65, 65);
 }
 
+.list li:hover {
+    cursor: move;
+    background-color: #f3f3f3;
+}
+
+.list li:hover>.actions {
+    display: flex;
+    cursor: move;
+}
+
+.list li::before {
+    content: "";
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* =========================
+   WATCHLIST FOOTER
+========================= */
+
 .watchlist-number {
     height: 6%;
-    width: 32%;
+    width: 100%;
     box-sizing: border-box;
-    position: fixed;
+    position: absolute;
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    bottom: 1px;
-    padding: 20px 20px 20px 0;
+    bottom: 0;
     left: 0;
+    padding: 10px 20px;
     border: 1px solid rgb(231, 231, 231);
     z-index: 5;
     background: #fff;
@@ -789,6 +770,12 @@ hr {
     color: rgb(223, 73, 73);
 }
 
+.watchlist-number ul li:hover {
+    color: rgb(245, 104, 52);
+    cursor: pointer;
+    background: rgb(243, 243, 243);
+}
+
 .down {
     color: rgb(223, 73, 73);
 }
@@ -802,42 +789,17 @@ hr {
     color: rgb(105, 105, 105);
 }
 
-/* sudo selectors */
-.search:focus {
-    outline: none;
-}
-
-.list li:hover {
-    cursor: move;
-    background-color: #f3f3f3;
-}
-
-.list li:hover>.actions {
-    display: flex;
-    cursor: move;
-}
-
-/* TODO */
-.list li::before {
-    content: "";
-    background: transparent;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.watchlist-number ul li:hover {
-    color: rgb(245, 104, 52);
-    cursor: pointer;
-    background: rgb(243, 243, 243);
-}
-
 .settings:hover {
     cursor: pointer;
 }
 
 .action:hover {
     background-color: rgb(212, 212, 212);
+}
+
+/* GENERAL ELEMENTS */
+
+hr {
+    border-left: 0.8px solid rgb(243, 242, 242);
+    height: 30px;
 }

@@ -1,177 +1,166 @@
-import React, { useState, useContext } from "react";
 
-import axios from "axios";
+import { useMemo, useState, useEffect } from "react";
+import Loader from "../common/Loader/Loader";
+import "./WatchList.css";
+import { fetchWatchlistData } from "../Services/WatchlistService";
 
-import GeneralContext from "./GeneralContext";
+const initialWatchlist = {
+    id: 1,
+    name: "Watchlist 1",
+    stocks: [],
+};
 
-import { Tooltip, Grow } from "@mui/material";
+const watchlistNames = [
+    { id: 1, name: 'Watchlist 1' },
+    { id: 2, name: 'Watchlist 2' },
+    { id: 3, name: 'Watchlist 3' },
+    { id: 4, name: 'Watchlist 4' },
+    { id: 5, name: 'Watchlist 5' }
+];
 
-import {
-    BarChartOutlined,
-    KeyboardArrowDown,
-    KeyboardArrowUp,
-    MoreHoriz,
-} from "@mui/icons-material";
-
-import { watchlist } from "../data/data";
-import { DoughnutChart } from "./DoughnoutChart";
-
-const labels = watchlist.map((subArray) => subArray["name"]);
+const formatPrice = (value) =>
+    new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(value);
 
 const WatchList = () => {
-    const data = {
-        labels,
-        datasets: [
-            {
-                label: "Price",
-                data: watchlist.map((stock) => stock.price),
-                backgroundColor: [
-                    "rgba(255, 99, 132, 0.5)",
-                    "rgba(54, 162, 235, 0.5)",
-                    "rgba(255, 206, 86, 0.5)",
-                    "rgba(75, 192, 192, 0.5)",
-                    "rgba(153, 102, 255, 0.5)",
-                    "rgba(255, 159, 64, 0.5)",
-                ],
-                borderColor: [
-                    "rgba(255, 99, 132, 1)",
-                    "rgba(54, 162, 235, 1)",
-                    "rgba(255, 206, 86, 1)",
-                    "rgba(75, 192, 192, 1)",
-                    "rgba(153, 102, 255, 1)",
-                    "rgba(255, 159, 64, 1)",
-                ],
-                borderWidth: 1,
-            },
-        ],
-    };
+    const [watchlist, setWatchlist] = useState(initialWatchlist);
+    const [activeWatchlist, setActiveWatchlist] = useState("Watchlist 1");
+    const [sortBy, setSortBy] = useState("default");
+    const [selectedStock, setSelectedStock] = useState(null);
 
-    // export const data = {
-    //   labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-    // datasets: [
-    //   {
-    //     label: "# of Votes",
-    //     data: [12, 19, 3, 5, 2, 3],
-    //     backgroundColor: [
-    //       "rgba(255, 99, 132, 0.2)",
-    //       "rgba(54, 162, 235, 0.2)",
-    //       "rgba(255, 206, 86, 0.2)",
-    //       "rgba(75, 192, 192, 0.2)",
-    //       "rgba(153, 102, 255, 0.2)",
-    //       "rgba(255, 159, 64, 0.2)",
-    //     ],
-    //     borderColor: [
-    //       "rgba(255, 99, 132, 1)",
-    //       "rgba(54, 162, 235, 1)",
-    //       "rgba(255, 206, 86, 1)",
-    //       "rgba(75, 192, 192, 1)",
-    //       "rgba(153, 102, 255, 1)",
-    //       "rgba(255, 159, 64, 1)",
-    //     ],
-    //     borderWidth: 1,
-    //   },
-    // ],
-    // };
+
+    const sortedStocks = useMemo(() => {
+        const stocks = [...(watchlist?.stocks || [])];
+
+        if (sortBy === "price-high") {
+            return stocks.sort((a, b) => b.currentPrice - a.currentPrice);
+        }
+
+        if (sortBy === "price-low") {
+            return stocks.sort((a, b) => a.currentPrice - b.currentPrice);
+        }
+
+        return stocks;
+    }, [watchlist, sortBy]);
+
+    const [loader, setLoader] = useState(false);
+
+    async function fetchWatchList(watchlistName) {
+        try {
+            setLoader(true);
+            const res = await fetchWatchlistData(watchlistName);
+            const data = res?.data;
+            setWatchlist(data);
+        }
+        catch (error) {
+            console.log("Error ", error);
+            setWatchlist({});
+        }
+        finally {
+            setLoader(false);
+        }
+    }
+
+    //initial render
+    useEffect(() => {
+        //fetch the watchlist 1 stocks
+        fetchWatchList("Watchlist 1");
+    }, []);
 
     return (
-        <div className="watchlist-container">
-            <div className="search-container">
-                <input
-                    type="text"
-                    name="search"
-                    id="search"
-                    placeholder="Search eg:infy, bse, nifty fut weekly, gold mcx"
-                    className="search"
-                />
-                <span className="counts"> {watchlist.length} / 50</span>
+        <aside className="watchlist-container">
+            <div className="watchlist-topbar">
+                <button
+                    type="button"
+                    className="watchlist-favorite"
+                    aria-label="Favourite watchlist"
+                >
+                    ♡
+                </button>
+
+                <h3>{activeWatchlist}</h3>
+
+                <select
+                    className="watchlist-sort"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    aria-label="Sort stocks"
+                >
+                    <option value="default">Sort By</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="price-low">Price: Low to High</option>
+                </select>
             </div>
 
-            <ul className="list">
-                {watchlist.map((stock, index) => {
-                    return <WatchListItem stock={stock} key={index} />;
-                })}
-            </ul>
+            <div className="watchlist-stocks">
+                {sortedStocks.length > 0 ? (
+                    sortedStocks.map((stock) => {
+                        const isPositive = stock.change >= 0;
+                        const isSelected = selectedStock === stock.symbol;
 
-            <DoughnutChart data={data} />
-        </div>
+                        return (
+                            <div
+                                key={stock.symbol}
+                                className={`watchlist-stock-row ${isPositive ? "positive" : "negative"
+                                    } ${isSelected ? "selected" : ""}`}
+                                onClick={() =>
+                                    setSelectedStock(stock.symbol)
+                                }
+                            >
+                                <div className="watchlist-stock-details">
+                                    <div className="watchlist-stock-name">
+                                        <span>{stock.companyname}</span>
+
+                                        {stock.event && (
+                                            <span className="watchlist-event">
+                                                ▣ {stock.event}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <span className="watchlist-exchange">
+                                        {stock.exchange}
+                                    </span>
+                                </div>
+
+                                <div className="watchlist-stock-quote">
+                                    <strong>{formatPrice(stock.currentPrice)}</strong>
+                                </div>
+                            </div>
+                        );
+                    })
+                ) : loader ?
+                    <Loader />
+                    : (
+                        <div className="watchlist-empty">
+                            No stocks in this watchlist.
+                        </div>
+                    )}
+            </div>
+
+            <div className="watchlist-pagination">
+                {watchlistNames.map((watchlist) => (
+                    <button
+                        key={watchlist.id}
+                        type="button"
+                        className={
+                            activeWatchlist === watchlist.name ? "active" : ""
+                        }
+                        onClick={() => {
+                            setActiveWatchlist(watchlist.name);
+                            fetchWatchList(watchlist.name);
+                            setSortBy("default");
+                            setSelectedStock(null);
+                        }}
+                    >
+                        {watchlist.id}
+                    </button>
+                ))}
+            </div>
+        </aside>
     );
 };
 
 export default WatchList;
-
-const WatchListItem = ({ stock }) => {
-    const [showWatchlistActions, setShowWatchlistActions] = useState(false);
-
-    const handleMouseEnter = (e) => {
-        setShowWatchlistActions(true);
-    };
-
-    const handleMouseLeave = (e) => {
-        setShowWatchlistActions(false);
-    };
-
-    return (
-        <li onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <div className="item">
-                <p className={stock.isDown ? "down" : "up"}>{stock.name}</p>
-                <div className="itemInfo">
-                    <span className="percent">{stock.percent}</span>
-                    {stock.isDown ? (
-                        <KeyboardArrowDown className="down" />
-                    ) : (
-                        <KeyboardArrowUp className="up" />
-                    )}
-                    <span className="price">{stock.price}</span>
-                </div>
-            </div>
-            {showWatchlistActions && <WatchListActions uid={stock.name} />}
-        </li>
-    );
-};
-
-const WatchListActions = ({ uid }) => {
-    const generalContext = useContext(GeneralContext);
-
-    const handleBuyClick = () => {
-        generalContext.openBuyWindow(uid);
-    };
-
-    return (
-        <span className="actions">
-            <span>
-                <Tooltip
-                    title="Buy (B)"
-                    placement="top"
-                    arrow
-                    TransitionComponent={Grow}
-                    onClick={handleBuyClick}
-                >
-                    <button className="buy">Buy</button>
-                </Tooltip>
-                <Tooltip
-                    title="Sell (S)"
-                    placement="top"
-                    arrow
-                    TransitionComponent={Grow}
-                >
-                    <button className="sell">Sell</button>
-                </Tooltip>
-                <Tooltip
-                    title="Analytics (A)"
-                    placement="top"
-                    arrow
-                    TransitionComponent={Grow}
-                >
-                    <button className="action">
-                        <BarChartOutlined className="icon" />
-                    </button>
-                </Tooltip>
-                <Tooltip title="More" placement="top" arrow TransitionComponent={Grow}>
-                    <button className="action">
-                        <MoreHoriz className="icon" />
-                    </button>
-                </Tooltip>
-            </span>
-        </span>
-    );
-};
