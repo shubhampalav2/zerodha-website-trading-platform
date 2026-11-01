@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import RegexStore from "../../utils/RegexStore";
+import { signUp } from "../../services/AuthService";
+import toast from 'react-hot-toast';
 const SignupForm = ({ setAuthMode, mainRef }) => {
 
     //creating a singup schema
@@ -12,6 +15,8 @@ const SignupForm = ({ setAuthMode, mainRef }) => {
         conformPassword: yup.string().required("This field is mandatory").oneOf([yup.ref("password")], "Password and Confirm Password must match"),
         mobileNumber: yup.string().required("This field is mandatory").matches(RegexStore.mobileRegex, "Please enter valid mobile number")
     });
+
+    const [loading, setLoading] = useState(false);
 
     const { register, reset, handleSubmit, formState: {
         errors
@@ -27,8 +32,25 @@ const SignupForm = ({ setAuthMode, mainRef }) => {
         resolver: yupResolver(signupSchema)
     })
 
-    function submit(data) {
-        console.log(data);
+    async function submit(data) {
+        setLoading(true);
+        try {
+            const res = await signUp(data);
+            toast.success(res?.message ?? "User successfully logged");
+            reset();
+            const searchParams = new URLSearchParams();
+            searchParams.append('authToken', res.authToken);
+            const redirectUrl = `http://localhost:3001?${searchParams.toString()}`;
+            //redirecting the user to the dashboard website
+            window.open(redirectUrl, '_self');
+        }
+        catch (error) {
+            console.dir(error);
+            toast.error(error?.response?.data?.message ?? "Something Went Wrong");
+        }
+        finally {
+            setLoading(false);
+        }
     }
 
     return <div className="auth-container">
@@ -105,7 +127,7 @@ const SignupForm = ({ setAuthMode, mainRef }) => {
                     <span className="err-msg">{errors?.conformPassword?.message}</span>
                 </div>
 
-                <button type="submit" className="btn auth-btn">
+                <button type="submit" className="btn auth-btn" disabled={loading}>
                     Create Account
                 </button>
             </form>

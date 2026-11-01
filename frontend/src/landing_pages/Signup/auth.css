@@ -61,6 +61,13 @@
     color: white;
 }
 
+.auth-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #a0a0a0;
+    border-color: #a0a0a0;
+}
+
 .btn-link {
     color: #387ed1;
     font-weight: 500;

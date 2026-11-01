@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import RegexStore from "../../utils/RegexStore";
+import { login } from "../../services/AuthService";
+import toast from 'react-hot-toast';
 const LoginForm = ({ setAuthMode, mainRef }) => {
 
     //creating a yup schema
@@ -17,9 +20,27 @@ const LoginForm = ({ setAuthMode, mainRef }) => {
         resolver: yupResolver(loginSchema)
     });
 
+    const [loading, setLoading] = useState(false);
 
-    function submit(data) {
-        console.log("Data is ", data);
+
+    async function submit(data) {
+        setLoading(true);
+        try {
+            const res = await login(data);
+            toast.success(res?.message ?? "User successfully logged");
+            reset();
+            const searchParams = new URLSearchParams();
+            searchParams.append('authToken', res.authToken);
+            const redirectUrl = `http://localhost:3001?${searchParams.toString()}`;
+            //redirecting the user to the dashboard website
+            window.open(redirectUrl, '_self');
+        }
+        catch (error) {
+            toast.error(error?.response?.data?.message ?? "Something Went Wrong");
+        }
+        finally {
+            setLoading(false);
+        }
     }
 
     return <div className="auth-container">
@@ -55,7 +76,7 @@ const LoginForm = ({ setAuthMode, mainRef }) => {
                     <span className="err-msg">{errors?.password?.message}</span>
                 </div>
 
-                <button className="btn auth-btn mt-4">
+                <button className="btn auth-btn mt-4" disabled={loading}>
                     Login
                 </button>
             </form>

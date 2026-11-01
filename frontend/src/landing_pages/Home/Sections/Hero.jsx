@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 export default function Hero() {
+    const navigate = useNavigate();
     function redirect() {
-        window.open('https://zerodha.com/open-account', '_target');
+        navigate('/signup')
     }
     return <div className="container p-5 mt-5">
         <div className="row text-center">

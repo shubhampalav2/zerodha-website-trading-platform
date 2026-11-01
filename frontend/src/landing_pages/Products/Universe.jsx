@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Universe() {
+    const navigate = useNavigate();
     function redirect(url) {
         window.open(url, "_blank");
     }
@@ -100,7 +102,7 @@ function Universe() {
                     <button
                         className="btn btn-primary btn-lg px-5 py-2"
                         onClick={() =>
-                            window.open("https://zerodha.com/open-account/", "_blank")
+                            navigate("/signup")
                         }
                     >
                         Signup Now
