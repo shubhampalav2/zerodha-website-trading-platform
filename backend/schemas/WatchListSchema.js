@@ -1,5 +1,22 @@
 const mongoose = require("mongoose");
 
+const StocksSchema = new mongoose.Schema({
+    companyname: {
+        type: String,
+        required: true
+    },
+    exchange: {
+        type: String,
+        required: true
+    },
+    currentPrice: {
+        type: String,
+        required: true
+    }
+}, {
+    _id: false
+});
+
 const WatchListSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -10,17 +27,9 @@ const WatchListSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    price: {
-        type: Number,
-        required: true
-    },
-    percent: {
-        type: String,
-        required: true
-    },
-    isDown: {
-        type: boolean,
-        required: true
+    stocks: {
+        type: [StocksSchema],
+        default: []
     }
 });
 

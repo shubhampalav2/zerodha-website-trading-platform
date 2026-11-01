@@ -7,6 +7,7 @@ const authRoutes = require("./routes/auth.routes");
 const stockRoutes = require("./routes/stocks.routes");
 const orderRoutes = require("./routes/order.routes");
 const holdingRoutes = require("./routes/holding.routes");
+const watchlistRoutes = require("./routes/watchlist.routes");
 
 //Loading all the configurations in the process object
 dotenv.config();
@@ -20,6 +21,7 @@ app.use(express.json());
 
 const authMiddleware = require("./middlewares/auth.js");
 
+
 //creating a middleware for verifying the authentication
 app.use("/api/v1/dashboard", authMiddleware)
 
@@ -28,6 +30,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/dashboard', stockRoutes);
 app.use('/api/v1/dashboard', orderRoutes);
 app.use('/api/v1/dashboard', holdingRoutes);
+app.use('/api/v1/dashboard', watchlistRoutes);
 
 const port = process.env.PORT || process.env.port || 3000;
 

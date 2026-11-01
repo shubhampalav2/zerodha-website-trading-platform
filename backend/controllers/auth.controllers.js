@@ -38,7 +38,9 @@ const loginHandler = async (req, res) => {
 
     try {
         //Find the user in database
-        const user = await User.findOne({ userName: email })
+        const user = await User.findOne({ userName: email });
+
+        console.log("User is ", user);
 
         //If user not present in database
         if (!user) {
@@ -58,7 +60,8 @@ const loginHandler = async (req, res) => {
             })
         }
         const payload = {
-            username: user.userName,
+            userName: user.fullName,
+            email: user.userName,
             userId: user._id
         }
         //Creating a jwt token
