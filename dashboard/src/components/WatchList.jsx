@@ -1,8 +1,11 @@
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useContext } from "react";
 import Loader from "../common/Loader/Loader";
 import "./WatchList.css";
 import { fetchWatchlistData } from "../Services/WatchlistService";
+import { removeStockFromWatchlist } from "../Services/StocksService";
+import GeneralContext from "./GeneralContext";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 const initialWatchlist = {
     id: 1,
@@ -17,6 +20,7 @@ const watchlistNames = [
     { id: 4, name: 'Watchlist 4' },
     { id: 5, name: 'Watchlist 5' }
 ];
+const WATCHLIST_STORAGE_KEY = "stockWatchlistSelections";
 
 const formatPrice = (value) =>
     new Intl.NumberFormat("en-IN", {
@@ -25,6 +29,7 @@ const formatPrice = (value) =>
     }).format(value);
 
 const WatchList = () => {
+    const general = useContext(GeneralContext);
     const [watchlist, setWatchlist] = useState(initialWatchlist);
     const [activeWatchlist, setActiveWatchlist] = useState("Watchlist 1");
     const [sortBy, setSortBy] = useState("default");
@@ -46,6 +51,40 @@ const WatchList = () => {
     }, [watchlist, sortBy]);
 
     const [loader, setLoader] = useState(false);
+    const [removingStock, setRemovingStock] = useState(null);
+
+    const removeStock = async (stock) => {
+        const key = stock.companyname;
+        if (removingStock) return;
+        setRemovingStock(key);
+        try {
+            await removeStockFromWatchlist({
+                name: activeWatchlist,
+                companyname: stock.companyname,
+                exchange: stock.exchange,
+            });
+            try {
+                const selections = JSON.parse(localStorage.getItem(WATCHLIST_STORAGE_KEY) || "{}");
+                const symbol = String(stock.companyname || "").toUpperCase();
+                const nextSelections = { ...selections };
+                Object.keys(nextSelections).forEach((selectionKey) => {
+                    if (selectionKey.toUpperCase() !== symbol) return;
+                    const updatedLists = nextSelections[selectionKey].filter((name) => name !== activeWatchlist);
+                    if (updatedLists.length) nextSelections[selectionKey] = updatedLists;
+                    else delete nextSelections[selectionKey];
+                });
+                localStorage.setItem(WATCHLIST_STORAGE_KEY, JSON.stringify(nextSelections));
+                window.dispatchEvent(new Event("watchlist-selections-updated"));
+            } catch (error) {
+                console.error("Could not update saved watchlist selections:", error);
+            }
+            window.dispatchEvent(new CustomEvent("watchlist-updated", { detail: { name: activeWatchlist } }));
+        } catch (error) {
+            console.error("Could not remove stock from watchlist:", error);
+        } finally {
+            setRemovingStock(null);
+        }
+    };
 
     async function fetchWatchList(watchlistName) {
         try {
@@ -68,6 +107,16 @@ const WatchList = () => {
         //fetch the watchlist 1 stocks
         fetchWatchList("Watchlist 1");
     }, []);
+
+    useEffect(() => {
+        const handleWatchlistUpdate = (event) => {
+            if (!event.detail?.name || event.detail.name === activeWatchlist) {
+                fetchWatchList(activeWatchlist);
+            }
+        };
+        window.addEventListener("watchlist-updated", handleWatchlistUpdate);
+        return () => window.removeEventListener("watchlist-updated", handleWatchlistUpdate);
+    }, [activeWatchlist]);
 
     return (
         <aside className="watchlist-container">
@@ -97,16 +146,19 @@ const WatchList = () => {
             <div className="watchlist-stocks">
                 {sortedStocks.length > 0 ? (
                     sortedStocks.map((stock) => {
-                        const isPositive = stock.change >= 0;
-                        const isSelected = selectedStock === stock.symbol;
+                        const change = Number(stock.currentPrice) - Number(stock.previousClose);
+                        const changePercent = Number(stock.previousClose) ? (change / Number(stock.previousClose)) * 100 : 0;
+                        const isPositive = change >= 0;
+                        const stockKey = stock.symbol || stock.companyname;
+                        const isSelected = selectedStock === stockKey;
 
                         return (
                             <div
-                                key={stock.symbol}
+                                key={stockKey}
                                 className={`watchlist-stock-row ${isPositive ? "positive" : "negative"
                                     } ${isSelected ? "selected" : ""}`}
                                 onClick={() =>
-                                    setSelectedStock(stock.symbol)
+                                    setSelectedStock(stockKey)
                                 }
                             >
                                 <div className="watchlist-stock-details">
@@ -127,6 +179,14 @@ const WatchList = () => {
 
                                 <div className="watchlist-stock-quote">
                                     <strong>{formatPrice(stock.currentPrice)}</strong>
+                                    <span className={isPositive ? "watchlist-positive" : "watchlist-negative-text"}>
+                                        {change >= 0 ? "" : "-"}{formatPrice(Math.abs(change))} ({changePercent.toFixed(2)}%)
+                                    </span>
+                                </div>
+                                <div className={`watchlist-stock-actions ${general.orderWindowOpen ? "order-open" : ""}`} onClick={(event) => event.stopPropagation()}>
+                                    <button type="button" className="watchlist-action buy" title="Buy" aria-label={`Buy ${stock.companyname}`} onClick={() => general.openOrderWindow({ ...stock, name: stock.companyname, symbol: stock.companyname, price: stock.currentPrice }, "BUY")}>B</button>
+                                    <button type="button" className="watchlist-action sell" title="Sell" aria-label={`Sell ${stock.companyname}`} onClick={() => general.openOrderWindow({ ...stock, name: stock.companyname, symbol: stock.companyname, price: stock.currentPrice }, "SELL")}>S</button>
+                                    <button type="button" className="watchlist-action delete" title="Remove from watchlist" aria-label={`Remove ${stock.companyname} from watchlist`} disabled={removingStock === stockKey} onClick={() => removeStock(stock)}><DeleteOutlineIcon fontSize="small" /></button>
                                 </div>
                             </div>
                         );

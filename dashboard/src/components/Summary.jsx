@@ -1,30 +1,8 @@
 import { useState, useEffect } from "react";
 import Loader from "../common/Loader/Loader.jsx";
 import { fetchPortfolioData } from "../Services/PortfolioService.js";
+import { setUserName } from "../common/Storage.js";
 import "./Summary.css";
-
-// const portfolio = {
-//     userName: "Shubham Jayprakash Palav",
-//     totalHoldings: 1,
-//     totalInvestment: 56000,
-//     currentValue: 17712.50,
-//     pnl: -38287.50,
-//     pnlPercentage: -68.37,
-// };
-
-const holdings = [
-    {
-        symbol: "INFY",
-        companyName: "Infosys Limited",
-        quantity: 10,
-        averagePrice: 5600,
-        currentPrice: 1771.25,
-        investment: 56000,
-        currentValue: 17712.50,
-        pnl: -38287.50,
-        pnlPercentage: -68.37,
-    },
-];
 
 const Summary = () => {
 
@@ -51,6 +29,7 @@ const Summary = () => {
         try {
             setLoader(true);
             const res = await fetchPortfolioData();
+            setUserName(res.portfolio.userName);
             setPortfolio(res.portfolio);
         }
         catch (error) {

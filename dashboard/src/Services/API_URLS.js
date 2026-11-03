@@ -4,6 +4,9 @@ export default class API_URLS {
     //API Endpoints
     watchlist = "watchlist";
     portfolio = "portfolio";
+    holdings = "holdings";
+    order = "orders";
+    stocks = "stocks";
 
     getWatchlistUrl() {
         return this.dashboardServerBaseUrl + this.watchlist;
@@ -11,5 +14,17 @@ export default class API_URLS {
 
     getPortfolioUrl() {
         return this.dashboardServerBaseUrl + this.portfolio;
+    }
+
+    getHoldingsUrl() {
+        return this.dashboardServerBaseUrl + this.holdings;
+    }
+
+    getOrdersUrl() {
+        return this.dashboardServerBaseUrl + this.order;
+    }
+
+    getStocksUrl() {
+        return this.dashboardServerBaseUrl + this.stocks;
     }
 }

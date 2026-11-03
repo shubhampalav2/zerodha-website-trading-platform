@@ -3,12 +3,12 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./index.css";
 import Home from "./components/Home";
+import { ToastContainer } from "react-toastify";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <Home />
-        </BrowserRouter>
-    </React.StrictMode>
+    <BrowserRouter>
+        <Home />
+        <ToastContainer />
+    </BrowserRouter>
 );

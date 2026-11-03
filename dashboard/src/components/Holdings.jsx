@@ -1,107 +1,297 @@
-import React, { useState, useEffect } from "react";
-import axios, { all } from "axios";
-import { VerticalGraph } from "./VerticalGraph";
 
-import { holdings } from "../data/data";
+import React, { useState, useEffect, useCallback, useContext } from "react";
+import "./Holdings.css";
+import GeneralContext from "./GeneralContext";
+
+import { fetchHoldings } from "../Services/HoldingsService";
+
+const PAGE_SIZE = 10;
 
 const Holdings = () => {
-    const [allHoldings, setAllHoldings] = useState(holdings);
+    const [allHoldings, setAllHoldings] = useState([]);
+    const [holdingsCount, setHoldingsCount] = useState(0);
+    const [page, setPage] = useState(1);
+    const [loader, setLoader] = useState(false);
+    const general = useContext(GeneralContext);
+    const { holdingsRefreshVersion } = general;
 
-    // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-    const labels = allHoldings.map((subArray) => subArray["name"]);
+    const totalPages = Math.ceil(holdingsCount / PAGE_SIZE);
 
-    const data = {
-        labels,
-        datasets: [
-            {
-                label: "Stock Price",
-                data: allHoldings.map((stock) => stock.price),
-                backgroundColor: "rgba(255, 99, 132, 0.5)",
-            },
-        ],
+    const fetchHoldingsData = useCallback(async (pageNo) => {
+        try {
+            setLoader(true);
+
+            const res = await fetchHoldings(pageNo);
+
+            setAllHoldings(res?.data || []);
+            setHoldingsCount(res?.count || 0);
+        } catch (error) {
+            console.error("Error fetching holdings:", error);
+
+            setAllHoldings([]);
+            setHoldingsCount(0);
+        } finally {
+            setLoader(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchHoldingsData(page);
+    }, [page, fetchHoldingsData, holdingsRefreshVersion]);
+
+    const handlePrevPage = () => {
+        if (page > 1) {
+            setPage((prev) => prev - 1);
+        }
     };
 
-    // export const data = {
-    //   labels,
-    //   datasets: [
-    // {
-    //   label: 'Dataset 1',
-    //   data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-    //   backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    // },
-    //     {
-    //       label: 'Dataset 2',
-    //       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-    //       backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    //     },
-    //   ],
-    // };
+    const handleNextPage = () => {
+        if (page < totalPages) {
+            setPage((prev) => prev + 1);
+        }
+    };
+
+    const formatCurrency = (value) => {
+        return Number(value || 0).toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+    };
+
+    const calculateProfitLoss = (stock) => {
+        return (stock.price - stock.avg) * stock.qty;
+    };
+
+    const totalInvestment = allHoldings.reduce(
+        (total, stock) => total + stock.avg * stock.qty,
+        0
+    );
+
+    const currentValue = allHoldings.reduce(
+        (total, stock) => total + stock.price * stock.qty,
+        0
+    );
+
+    const totalPnL = currentValue - totalInvestment;
+
+    const pnlPercentage =
+        totalInvestment > 0
+            ? (totalPnL / totalInvestment) * 100
+            : 0;
 
     return (
-        <>
-            <h3 className="title">Holdings ({allHoldings.length})</h3>
+        <div className="holdings-container">
 
-            <div className="order-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Instrument</th>
-                            <th>Qty.</th>
-                            <th>Avg. cost</th>
-                            <th>LTP</th>
-                            <th>Cur. val</th>
-                            <th>P&L</th>
-                            <th>Net chg.</th>
-                            <th>Day chg.</th>
-                        </tr>
-                    </thead>
+            {/* Header */}
+            <div className="holdings-header">
+                <div>
+                    <h2 className="holdings-title">
+                        Holdings
+                    </h2>
 
-                    <tbody>
-                        {allHoldings.map((stock, index) => {
-                            const curValue = stock.price * stock.qty;
-                            const isProfit = curValue - stock.avg * stock.qty >= 0.0;
-                            const profClass = isProfit ? "profit" : "loss";
-                            const dayClass = stock.isLoss ? "loss" : "profit";
+                    <p className="holdings-subtitle">
+                        Your investments and portfolio performance
+                    </p>
+                </div>
 
-                            return (
-                                <tr key={index}>
-                                    <td>{stock.name}</td>
-                                    <td>{stock.qty}</td>
-                                    <td>{stock.avg.toFixed(2)}</td>
-                                    <td>{stock.price.toFixed(2)}</td>
-                                    <td>{curValue.toFixed(2)}</td>
-                                    <td className={profClass}>
-                                        {(curValue - stock.avg * stock.qty).toFixed(2)}
+                <div className="holdings-count">
+                    {holdingsCount} Stocks
+                </div>
+            </div>
+
+            {/* Holdings Table */}
+            <div className="holdings-table-card">
+
+                <div className="holdings-table-header">
+                    <h3>Your Holdings</h3>
+
+                    <span>
+                        Page {page} of {totalPages || 1}
+                    </span>
+                </div>
+
+                <div className="holdings-table-wrapper">
+
+                    <table className="holdings-table">
+
+                        <thead>
+                            <tr>
+                                <th>Instrument</th>
+                                <th>Qty.</th>
+                                <th>Avg. Cost</th>
+                                <th>LTP</th>
+                                <th>Cur. Val</th>
+                                <th>P&L</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {loader ? (
+                                <tr>
+                                    <td
+                                        colSpan="7"
+                                        className="holdings-loader-cell"
+                                    >
+                                        <div className="holdings-loader">
+                                            <span className="loader-spinner"></span>
+
+                                            <span>
+                                                Loading holdings...
+                                            </span>
+                                        </div>
                                     </td>
-                                    <td className={profClass}>{stock.net}</td>
-                                    <td className={dayClass}>{stock.day}</td>
                                 </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                            ) : allHoldings.length > 0 ? (
+
+                                allHoldings.map((stock) => {
+                                    const curValue =
+                                        stock.price * stock.qty;
+
+                                    const pnl =
+                                        calculateProfitLoss(stock);
+
+                                    const isProfit = pnl >= 0;
+
+                                    return (
+                                        <tr key={stock._id || stock.name}>
+
+                                            <td>
+                                                <div className="instrument-info">
+                                                    <span className="instrument-name">
+                                                        {stock.name}
+                                                    </span>
+
+                                                    <span className="instrument-exchange">
+                                                        NSE
+                                                    </span>
+                                                </div>
+                                            </td>
+
+                                            <td>{stock.qty}</td>
+
+                                            <td>
+                                                ₹{formatCurrency(stock.avg)}
+                                            </td>
+
+                                            <td>
+                                                ₹{formatCurrency(stock.price)}
+                                            </td>
+
+                                            <td>
+                                                ₹{formatCurrency(curValue)}
+                                            </td>
+
+                                            <td>
+                                                <div
+                                                    className={`pnl-cell ${isProfit
+                                                        ? "profit"
+                                                        : "loss"
+                                                        }`}
+                                                >
+                                                    <span>
+                                                        {isProfit ? "+" : "-"}₹
+                                                        {formatCurrency(
+                                                            Math.abs(pnl)
+                                                        )}
+                                                    </span>
+
+                                                    <span className="pnl-percentage">
+                                                        {stock.avg > 0
+                                                            ? (
+                                                                ((stock.price -
+                                                                    stock.avg) /
+                                                                    stock.avg) *
+                                                                100
+                                                            ).toFixed(2)
+                                                            : "0.00"}
+                                                        %
+                                                    </span>
+                                                </div>
+                                            </td>
+
+                                            <td className="holding-action-cell">
+                                                <button
+                                                    type="button"
+                                                    className="holding-sell-button"
+                                                    onClick={() => general.openSellWindow(stock)}
+                                                    aria-label={`Sell ${stock.name}`}
+                                                >
+                                                    Sell
+                                                </button>
+                                            </td>
+
+                                        </tr>
+                                    );
+                                })
+
+                            ) : (
+
+                                <tr>
+                                    <td
+                                        colSpan="7"
+                                        className="holdings-empty"
+                                    >
+                                        No holdings found.
+                                    </td>
+                                </tr>
+
+                            )}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                {/* Pagination */}
+                <div className="holdings-pagination">
+
+                    <div className="pagination-info">
+                        Showing{" "}
+                        {holdingsCount === 0
+                            ? 0
+                            : (page - 1) * PAGE_SIZE + 1}
+                        {" - "}
+                        {Math.min(page * PAGE_SIZE, holdingsCount)}
+                        {" of "}
+                        {holdingsCount} holdings
+                    </div>
+
+                    <div className="pagination-controls">
+
+                        <button
+                            className="pagination-btn"
+                            onClick={handlePrevPage}
+                            disabled={page === 1 || loader}
+                        >
+                            <span>←</span>
+                            Prev
+                        </button>
+
+                        <span className="pagination-current">
+                            {page}
+                        </span>
+
+                        <button
+                            className="pagination-btn"
+                            onClick={handleNextPage}
+                            disabled={
+                                page >= totalPages || loader
+                            }
+                        >
+                            Next
+                            <span>→</span>
+                        </button>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <div className="row">
-                <div className="col">
-                    <h5>
-                        29,875.<span>55</span>{" "}
-                    </h5>
-                    <p>Total investment</p>
-                </div>
-                <div className="col">
-                    <h5>
-                        31,428.<span>95</span>{" "}
-                    </h5>
-                    <p>Current value</p>
-                </div>
-                <div className="col">
-                    <h5>1,553.40 (+5.20%)</h5>
-                    <p>P&L</p>
-                </div>
-            </div>
-            <VerticalGraph data={data} />
-        </>
+        </div>
     );
 };
 

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 
 import "./Menu.css";
+import { getUserName } from "../common/Storage";
 
 const Menu = () => {
     const [selectedMenu, setSelectedMenu] = useState(0);
@@ -11,7 +12,13 @@ const Menu = () => {
     //created a state variable for mobile menu
     const [mobileMenu, setMobileMenu] = useState(false);
 
+    const [username, setUsername] = useState("");
+
     const isMobile = window.innerWidth < 767;
+
+    useEffect(() => {
+        setUsername(getUserName());
+    }, [getUserName()]);
 
     const handleMenuClick = (index) => {
         setSelectedMenu(index);
@@ -71,22 +78,11 @@ const Menu = () => {
                     <li>
                         <Link
                             style={{ textDecoration: "none" }}
-                            to="/positions"
+                            to="/stocks"
                             onClick={() => handleMenuClick(3)}
                         >
                             <p className={selectedMenu === 3 ? activeMenuClass : menuClass}>
-                                Positions
-                            </p>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            style={{ textDecoration: "none" }}
-                            to="funds"
-                            onClick={() => handleMenuClick(4)}
-                        >
-                            <p className={selectedMenu === 4 ? activeMenuClass : menuClass}>
-                                Funds
+                                Stocks
                             </p>
                         </Link>
                     </li>
@@ -94,7 +90,6 @@ const Menu = () => {
                 <hr />
                 <div className="profile" onClick={handleProfileClick}>
                     <div className="avatar">ZU</div>
-                    <p className="username">USERID</p>
                 </div>
                 {isProfileDropdownOpen && <div className="profile-dropdown">
                     <div className="dropdown-header">
@@ -102,15 +97,19 @@ const Menu = () => {
 
                         <div>
                             <h4>User Name</h4>
-                            <p>user@email.com</p>
+                            <p>{username}</p>
                         </div>
                     </div>
 
                     <hr />
 
-                    <a href="/" className="logout">
+                    <Link className="logout" onClick={() => {
+                        //clearing the localstorage
+                        localStorage.clear();
+                        window.open("http://localhost:3000/signup", "_self");
+                    }}>
                         Logout
-                    </a>
+                    </Link>
                 </div>}
             </div>
         </div>

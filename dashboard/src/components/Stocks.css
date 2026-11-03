@@ -1,0 +1,59 @@
+.stocks-container { width: 100%; box-sizing: border-box; padding: 24px; color: #1e293b; }
+.stocks-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.stocks-header h1 { margin: 0; color: #0f172a; font-size: 24px; }
+.stocks-header p { margin: 6px 0 0; color: #64748b; font-size: 14px; }
+.stocks-count { padding: 8px 14px; border-radius: 20px; background: #eff6ff; color: #2563eb; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.stocks-card { overflow: hidden; border: 1px solid #e2e8f0; border-radius: 12px; background: white; }
+.stocks-card-heading { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; border-bottom: 1px solid #e2e8f0; }
+.stocks-card-heading h2 { margin: 0; color: #0f172a; font-size: 17px; }
+.stocks-card-heading span { color: #64748b; font-size: 13px; }
+.stocks-table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.stocks-table { width: 100%; min-width: 760px; border-collapse: collapse; white-space: nowrap; }
+.stocks-table thead { background: #f8fafc; }
+.stocks-table th { padding: 14px 18px; color: #64748b; font-size: 11px; text-align: left; text-transform: uppercase; letter-spacing: .04em; }
+.stocks-table td { padding: 15px 18px; border-bottom: 1px solid #f1f5f9; color: #334155; font-size: 13px; }
+.stocks-table tbody tr:last-child td { border-bottom: 0; }
+.stocks-instrument { display: grid; gap: 4px; }
+.stocks-instrument strong { color: #0f172a; font-size: 13px; }
+.stocks-instrument span { color: #94a3b8; font-size: 11px; }
+.stocks-positive, .stocks-negative { font-weight: 600; }
+.stocks-positive { color: #16a34a !important; }
+.stocks-negative { color: #dc2626 !important; }
+.stocks-table td small { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; }
+.stocks-actions { display: flex; align-items: center; gap: 7px; }
+.stocks-actions button { min-height: 32px; padding: 0 12px; border: 1px solid transparent; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.stocks-buy { background: #eff6ff; color: #2563eb; }
+.stocks-sell { background: #fff1f2; color: #dc2626; }
+.stocks-watch { width: 34px; padding: 0 !important; border-color: #cbd5e1 !important; background: #fff; color: #64748b; font-size: 19px !important; line-height: 1; }
+.stocks-watch.active { border-color: #fecdd3 !important; background: #ffe4e6; color: #e11d48; }
+.stocks-actions button:hover { filter: brightness(.96); }
+.stocks-empty { height: 140px; color: #64748b !important; text-align: center; }
+.stocks-pagination { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 20px; border-top: 1px solid #e2e8f0; color: #64748b; font-size: 12px; }
+.stocks-pagination div { display: flex; align-items: center; gap: 8px; }
+.stocks-pagination button { min-height: 34px; padding: 0 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #334155; cursor: pointer; }
+.stocks-pagination button:disabled { opacity: .45; cursor: not-allowed; }
+.stocks-pagination strong { display: grid; min-width: 32px; height: 32px; place-items: center; border-radius: 6px; background: #2563eb; color: white; }
+.watchlist-drawer-backdrop { position: fixed; inset: 0; z-index: 1100; display: flex; justify-content: flex-end; background: rgba(15, 23, 42, .25); }
+.watchlist-drawer { width: min(380px, 100vw); height: 100%; box-sizing: border-box; padding: 22px; background: #fff; box-shadow: -12px 0 40px rgba(15, 23, 42, .16); }
+.watchlist-drawer header { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 18px; border-bottom: 1px solid #e2e8f0; }
+.watchlist-drawer header h2 { margin: 0; color: #0f172a; font-size: 18px; }
+.watchlist-drawer header p { margin: 7px 0 0; color: #64748b; font-size: 12px; }
+.watchlist-drawer header button { align-self: flex-start; border: 0; background: transparent; color: #64748b; font-size: 26px; cursor: pointer; }
+.watchlist-drawer-options { display: grid; gap: 10px; padding-top: 18px; }
+.watchlist-drawer-options button { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 52px; padding: 0 14px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; color: #334155; text-align: left; cursor: pointer; }
+.watchlist-drawer-options button:hover { background: #f8fafc; }
+.watchlist-drawer-options button.added { border-color: #fecdd3; background: #fff1f2; color: #be123c; }
+.watchlist-drawer-options button:disabled { opacity: .7; cursor: wait; }
+.watchlist-drawer-options button span:last-child { color: #64748b; font-size: 12px; }
+.watchlist-drawer-options button.added:hover::after { content: "Remove from watchlist"; position: absolute; right: 24px; padding: 7px 9px; border-radius: 5px; background: #0f172a; color: #fff; font-size: 11px; }
+.watchlist-drawer-error { margin: 16px 0 0; color: #dc2626; font-size: 13px; }
+
+@media (max-width: 600px) {
+    .stocks-container { padding: 14px; }
+    .stocks-header { margin-bottom: 16px; }
+    .stocks-header h1 { font-size: 21px; }
+    .stocks-card-heading { padding: 15px; }
+    .stocks-pagination { align-items: flex-start; flex-direction: column; padding: 14px; }
+    .stocks-pagination div { align-self: flex-end; }
+    .watchlist-drawer { padding: 18px; }
+}

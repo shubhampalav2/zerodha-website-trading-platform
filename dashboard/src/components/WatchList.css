@@ -80,6 +80,7 @@
 /* Individual stock */
 
 .watchlist-stock-row {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -140,6 +141,7 @@
     align-items: flex-end;
     gap: 10px;
     flex-shrink: 0;
+    transition: opacity 0.15s ease;
 }
 
 .watchlist-stock-quote strong {
@@ -152,6 +154,52 @@
     font-size: 11px;
     white-space: nowrap;
 }
+
+.watchlist-stock-actions {
+    position: absolute;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.watchlist-stock-row:hover .watchlist-stock-actions,
+.watchlist-stock-row:focus-within .watchlist-stock-actions {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.watchlist-stock-actions.order-open {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.watchlist-stock-row:hover .watchlist-stock-quote {
+    opacity: 0;
+}
+
+.watchlist-action {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 1px solid #eeeeee;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #387ed1;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 1px 5px rgba(15, 23, 42, 0.1);
+}
+
+.watchlist-action:hover { background: #f5f9ff; }
+.watchlist-action.sell { color: #e53935; }
+.watchlist-action.delete { color: #387ed1; }
+.watchlist-action:disabled { opacity: 0.5; cursor: wait; }
 
 .watchlist-positive {
     color: #4caf50;
