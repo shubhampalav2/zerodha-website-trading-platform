@@ -4,6 +4,7 @@ import "./Holdings.css";
 import GeneralContext from "./GeneralContext";
 
 import { fetchHoldings } from "../Services/HoldingsService";
+import { useLivePrices } from "../context/PriceContext";
 
 const PAGE_SIZE = 10;
 
@@ -13,6 +14,7 @@ const Holdings = () => {
     const [page, setPage] = useState(1);
     const [loader, setLoader] = useState(false);
     const general = useContext(GeneralContext);
+    const { prices } = useLivePrices();
     const { holdingsRefreshVersion } = general;
 
     const totalPages = Math.ceil(holdingsCount / PAGE_SIZE);
@@ -58,19 +60,17 @@ const Holdings = () => {
         });
     };
 
-    const calculateProfitLoss = (stock) => {
-        return (stock.price - stock.avg) * stock.qty;
-    };
-
     const totalInvestment = allHoldings.reduce(
-        (total, stock) => total + stock.avg * stock.qty,
+        (total, stock) => total + (Number(stock.avg) || 0) * (Number(stock.qty) || 0),
         0
     );
 
-    const currentValue = allHoldings.reduce(
-        (total, stock) => total + stock.price * stock.qty,
-        0
-    );
+    const currentValue = allHoldings.reduce((total, stock) => {
+        const live = Number(prices[stock.name]?.currentPrice);
+        const fallback = Number(stock.price);
+        const price = Number.isFinite(live) && live > 0 ? live : (Number.isFinite(fallback) && fallback > 0 ? fallback : 0);
+        return total + price * (Number(stock.qty) || 0);
+    }, 0);
 
     const totalPnL = currentValue - totalInvestment;
 
@@ -146,11 +146,13 @@ const Holdings = () => {
                             ) : allHoldings.length > 0 ? (
 
                                 allHoldings.map((stock) => {
-                                    const curValue =
-                                        stock.price * stock.qty;
-
-                                    const pnl =
-                                        calculateProfitLoss(stock);
+                                    const live = Number(prices[stock.name]?.currentPrice);
+                                    const fallback = Number(stock.price);
+                                    const livePrice = Number.isFinite(live) && live > 0 ? live : (Number.isFinite(fallback) && fallback > 0 ? fallback : 0);
+                                    const qty = Number(stock.qty) || 0;
+                                    const avg = Number(stock.avg) || 0;
+                                    const curValue = livePrice * qty;
+                                    const pnl = curValue - avg * qty;
 
                                     const isProfit = pnl >= 0;
 
@@ -172,11 +174,11 @@ const Holdings = () => {
                                             <td>{stock.qty}</td>
 
                                             <td>
-                                                ₹{formatCurrency(stock.avg)}
+                                                ₹{formatCurrency(avg)}
                                             </td>
 
                                             <td>
-                                                ₹{formatCurrency(stock.price)}
+                                                ₹{formatCurrency(livePrice)}
                                             </td>
 
                                             <td>
@@ -200,9 +202,7 @@ const Holdings = () => {
                                                     <span className="pnl-percentage">
                                                         {stock.avg > 0
                                                             ? (
-                                                                ((stock.price -
-                                                                    stock.avg) /
-                                                                    stock.avg) *
+                                                                ((livePrice - avg) / avg) *
                                                                 100
                                                             ).toFixed(2)
                                                             : "0.00"}
@@ -215,7 +215,7 @@ const Holdings = () => {
                                                 <button
                                                     type="button"
                                                     className="holding-sell-button"
-                                                    onClick={() => general.openSellWindow(stock)}
+                                                    onClick={() => general.openSellWindow({ ...stock, price: livePrice })}
                                                     aria-label={`Sell ${stock.name}`}
                                                 >
                                                     Sell

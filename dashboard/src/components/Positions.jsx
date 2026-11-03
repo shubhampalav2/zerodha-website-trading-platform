@@ -1,8 +1,10 @@
 import React from "react";
+import { useLivePrices } from "../context/PriceContext";
 
 import { positions } from "../data/data";
 
 const Positions = () => {
+    const { prices } = useLivePrices();
     return (
         <>
             <h3 className="title">Positions ({positions.length})</h3>
@@ -20,8 +22,13 @@ const Positions = () => {
                     </tr>
 
                     {positions.map((stock, index) => {
-                        const curValue = stock.price * stock.qty;
-                        const isProfit = curValue - stock.avg * stock.qty >= 0.0;
+                        const candidate = Number(prices[stock.name]?.currentPrice);
+                        const fallback = Number(stock.price);
+                        const livePrice = Number.isFinite(candidate) && candidate > 0 ? candidate : (Number.isFinite(fallback) && fallback > 0 ? fallback : 0);
+                        const qty = Number(stock.qty) || 0;
+                        const avg = Number(stock.avg) || 0;
+                        const curValue = livePrice * qty;
+                        const isProfit = curValue - avg * qty >= 0.0;
                         const profClass = isProfit ? "profit" : "loss";
                         const dayClass = stock.isLoss ? "loss" : "profit";
 
@@ -30,10 +37,10 @@ const Positions = () => {
                                 <td>{stock.product}</td>
                                 <td>{stock.name}</td>
                                 <td>{stock.qty}</td>
-                                <td>{stock.avg.toFixed(2)}</td>
-                                <td>{stock.price.toFixed(2)}</td>
+                                <td>{avg.toFixed(2)}</td>
+                                <td>{livePrice.toFixed(2)}</td>
                                 <td className={profClass}>
-                                    {(curValue - stock.avg * stock.qty).toFixed(2)}
+                                    {(curValue - avg * qty).toFixed(2)}
                                 </td>
                                 <td className={dayClass}>{stock.day}</td>
                             </tr>

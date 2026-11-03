@@ -1,17 +1,18 @@
 const express = require("express");
 const dotenv = require("dotenv");
+dotenv.config();
 const cors = require("cors");
+const http = require("http");
 
 const { dbConnection } = require("./config/dbConnect");
+const { initializePriceSimulator } = require("./services/priceSimulator");
+const { initializeSocket } = require("./sockets/socket");
 
 const authRoutes = require("./routes/auth.routes");
 const stockRoutes = require("./routes/stocks.routes");
 const orderRoutes = require("./routes/order.routes");
 const holdingRoutes = require("./routes/holding.routes");
 const watchlistRoutes = require("./routes/watchlist.routes");
-
-//Loading all the configurations in the process object
-dotenv.config();
 
 //Initialize the server
 const app = express();
@@ -36,7 +37,7 @@ app.use('/api/v1/dashboard', orderRoutes);
 app.use('/api/v1/dashboard', holdingRoutes);
 app.use('/api/v1/dashboard', watchlistRoutes);
 
-const port = process.env.PORT || process.env.port || 3000;
+const port = process.env.PORT || process.env.port || 7000;
 
 //Default route
 app.get('/', (req, res) => {
@@ -47,8 +48,10 @@ async function startServer() {
     try {
         await dbConnection();
         console.log("Database connected");
-
-        app.listen(port, () => {
+        await initializePriceSimulator();
+        const server = http.createServer(app);
+        initializeSocket(server);
+        server.listen(port, () => {
             console.log(`Server is working at port: ${port}`);
         });
     } catch (error) {

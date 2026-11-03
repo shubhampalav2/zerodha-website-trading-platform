@@ -6,6 +6,7 @@ import { fetchWatchlistData } from "../Services/WatchlistService";
 import { removeStockFromWatchlist } from "../Services/StocksService";
 import GeneralContext from "./GeneralContext";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { useLivePrices } from "../context/PriceContext";
 
 const initialWatchlist = {
     id: 1,
@@ -30,6 +31,7 @@ const formatPrice = (value) =>
 
 const WatchList = () => {
     const general = useContext(GeneralContext);
+    const { prices } = useLivePrices();
     const [watchlist, setWatchlist] = useState(initialWatchlist);
     const [activeWatchlist, setActiveWatchlist] = useState("Watchlist 1");
     const [sortBy, setSortBy] = useState("default");
@@ -37,18 +39,22 @@ const WatchList = () => {
 
 
     const sortedStocks = useMemo(() => {
-        const stocks = [...(watchlist?.stocks || [])];
+        const stocks = (watchlist?.stocks || []).map((stock) => {
+            const live = Number(prices[stock.companyname]?.currentPrice);
+            const fallback = Number(stock.currentPrice);
+            return { ...stock, displayPrice: Number.isFinite(live) && live > 0 ? live : (Number.isFinite(fallback) && fallback > 0 ? fallback : 0) };
+        });
 
         if (sortBy === "price-high") {
-            return stocks.sort((a, b) => b.currentPrice - a.currentPrice);
+            return stocks.sort((a, b) => b.displayPrice - a.displayPrice);
         }
 
         if (sortBy === "price-low") {
-            return stocks.sort((a, b) => a.currentPrice - b.currentPrice);
+            return stocks.sort((a, b) => a.displayPrice - b.displayPrice);
         }
 
         return stocks;
-    }, [watchlist, sortBy]);
+    }, [watchlist, sortBy, prices]);
 
     const [loader, setLoader] = useState(false);
     const [removingStock, setRemovingStock] = useState(null);
@@ -146,8 +152,15 @@ const WatchList = () => {
             <div className="watchlist-stocks">
                 {sortedStocks.length > 0 ? (
                     sortedStocks.map((stock) => {
-                        const change = Number(stock.currentPrice) - Number(stock.previousClose);
-                        const changePercent = Number(stock.previousClose) ? (change / Number(stock.previousClose)) * 100 : 0;
+                        const live = prices[stock.companyname] || {};
+                        const apiPrice = Number(stock.currentPrice);
+                        const apiClose = Number(stock.previousClose);
+                        const livePrice = Number(live.currentPrice);
+                        const liveClose = Number(live.previousClose);
+                        const currentPrice = Number.isFinite(livePrice) && livePrice > 0 ? livePrice : (Number.isFinite(apiPrice) && apiPrice > 0 ? apiPrice : 0);
+                        const previousClose = Number.isFinite(liveClose) && liveClose > 0 ? liveClose : (Number.isFinite(apiClose) && apiClose > 0 ? apiClose : 0);
+                        const change = currentPrice - previousClose;
+                        const changePercent = previousClose > 0 ? (change / previousClose) * 100 : 0;
                         const isPositive = change >= 0;
                         const stockKey = stock.symbol || stock.companyname;
                         const isSelected = selectedStock === stockKey;
@@ -178,14 +191,14 @@ const WatchList = () => {
                                 </div>
 
                                 <div className="watchlist-stock-quote">
-                                    <strong>{formatPrice(stock.currentPrice)}</strong>
+                                    <strong>{formatPrice(currentPrice)}</strong>
                                     <span className={isPositive ? "watchlist-positive" : "watchlist-negative-text"}>
                                         {change >= 0 ? "" : "-"}{formatPrice(Math.abs(change))} ({changePercent.toFixed(2)}%)
                                     </span>
                                 </div>
                                 <div className={`watchlist-stock-actions ${general.orderWindowOpen ? "order-open" : ""}`} onClick={(event) => event.stopPropagation()}>
-                                    <button type="button" className="watchlist-action buy" title="Buy" aria-label={`Buy ${stock.companyname}`} onClick={() => general.openOrderWindow({ ...stock, name: stock.companyname, symbol: stock.companyname, price: stock.currentPrice }, "BUY")}>B</button>
-                                    <button type="button" className="watchlist-action sell" title="Sell" aria-label={`Sell ${stock.companyname}`} onClick={() => general.openOrderWindow({ ...stock, name: stock.companyname, symbol: stock.companyname, price: stock.currentPrice }, "SELL")}>S</button>
+                                    <button type="button" className="watchlist-action buy" title="Buy" aria-label={`Buy ${stock.companyname}`} onClick={() => general.openOrderWindow({ ...stock, name: stock.companyname, symbol: stock.companyname, price: currentPrice, currentPrice }, "BUY")}>B</button>
+                                    <button type="button" className="watchlist-action sell" title="Sell" aria-label={`Sell ${stock.companyname}`} onClick={() => general.openOrderWindow({ ...stock, name: stock.companyname, symbol: stock.companyname, price: currentPrice, currentPrice }, "SELL")}>S</button>
                                     <button type="button" className="watchlist-action delete" title="Remove from watchlist" aria-label={`Remove ${stock.companyname} from watchlist`} disabled={removingStock === stockKey} onClick={() => removeStock(stock)}><DeleteOutlineIcon fontSize="small" /></button>
                                 </div>
                             </div>

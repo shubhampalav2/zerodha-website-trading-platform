@@ -1,5 +1,5 @@
 export default class API_URLS {
-    dashboardServerBaseUrl = "http://localhost:7000/api/v1/dashboard/";
+    dashboardServerBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:7000/api/v1/dashboard/";
 
     //API Endpoints
     watchlist = "watchlist";

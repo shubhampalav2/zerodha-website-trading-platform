@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useState, useContext } from "react";
 import GeneralContext from "./GeneralContext";
 import { addStockToWatchlist, fetchStocks, removeStockFromWatchlist } from "../Services/StocksService";
+import { fetchWatchlistData } from "../Services/WatchlistService";
 import "./Stocks.css";
+import { useLivePrices } from "../context/PriceContext";
 
 const PAGE_SIZE = 10;
 const WATCHLISTS = ["Watchlist 1", "Watchlist 2", "Watchlist 3", "Watchlist 4", "Watchlist 5"];
@@ -19,11 +21,13 @@ const formatPrice = (value) => Number(value || 0).toLocaleString("en-IN", { mini
 
 const Stocks = () => {
     const general = useContext(GeneralContext);
+    const { prices } = useLivePrices();
     const [stocks, setStocks] = useState([]);
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [selections, setSelections] = useState(readSelections);
+    const [selectionsLoaded, setSelectionsLoaded] = useState(false);
     const [drawerStock, setDrawerStock] = useState(null);
     const [updatingList, setUpdatingList] = useState("");
     const [error, setError] = useState("");
@@ -32,6 +36,33 @@ const Stocks = () => {
         const refreshSelections = () => setSelections(readSelections());
         window.addEventListener("watchlist-selections-updated", refreshSelections);
         return () => window.removeEventListener("watchlist-selections-updated", refreshSelections);
+    }, []);
+
+    useEffect(() => {
+        let active = true;
+        Promise.all(WATCHLISTS.map((name) => fetchWatchlistData(name)))
+            .then((responses) => {
+                if (!active) return;
+                const savedSelections = {};
+                responses.forEach((response, index) => {
+                    const watchlist = response?.data;
+                    const watchlistStocks = Array.isArray(watchlist) ? [] : (watchlist?.stocks || []);
+                    watchlistStocks.forEach((stock) => {
+                        const symbol = String(stock.companyname || "").toUpperCase();
+                        if (!symbol) return;
+                        savedSelections[symbol] = [...(savedSelections[symbol] || []), WATCHLISTS[index]];
+                    });
+                });
+                setSelections(savedSelections);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(savedSelections));
+            })
+            .catch((requestError) => {
+                console.warn("Could not load saved watchlists from the server:", requestError);
+            })
+            .finally(() => {
+                if (active) setSelectionsLoaded(true);
+            });
+        return () => { active = false; };
     }, []);
 
     const totalPages = Math.ceil(count / PAGE_SIZE);
@@ -60,7 +91,7 @@ const Stocks = () => {
     );
 
     const toggleWatchlist = async (watchlistName) => {
-        if (!drawerStock || updatingList) return;
+        if (!drawerStock || updatingList || !selectionsLoaded) return;
         const stock = drawerStock;
         const isAdded = (selections[stock.symbol] || []).includes(watchlistName);
         const payload = {
@@ -100,7 +131,7 @@ const Stocks = () => {
             <header className="stocks-header">
                 <div>
                     <h1>Stocks</h1>
-                    <p>Current market data</p>
+                    <p>Simulated prices update live</p>
                 </div>
                 <span className="stocks-count">{count} Stocks</span>
             </header>
@@ -115,18 +146,25 @@ const Stocks = () => {
                         <thead><tr><th>Instrument</th><th>Exchange</th><th>Price</th><th>Change</th><th>Actions</th></tr></thead>
                         <tbody>
                             {loading ? <tr><td colSpan="5" className="stocks-empty">Loading stocks…</td></tr> : stocks.length ? stocks.map((stock) => {
-                                const change = Number(stock.currentPrice) - Number(stock.previousClose);
-                                const changePercent = stock.previousClose ? change / Number(stock.previousClose) * 100 : 0;
+                                const live = prices[stock.symbol] || {};
+                                const apiPrice = Number(stock.currentPrice);
+                                const apiClose = Number(stock.previousClose);
+                                const streamedPrice = Number(live.currentPrice);
+                                const streamedClose = Number(live.previousClose);
+                                const currentPrice = Number.isFinite(streamedPrice) && streamedPrice > 0 ? streamedPrice : (Number.isFinite(apiPrice) && apiPrice > 0 ? apiPrice : 0);
+                                const previousClose = Number.isFinite(streamedClose) && streamedClose > 0 ? streamedClose : (Number.isFinite(apiClose) && apiClose > 0 ? apiClose : 0);
+                                const change = currentPrice - previousClose;
+                                const changePercent = previousClose > 0 ? change / previousClose * 100 : 0;
                                 const isWatched = (selections[stock.symbol] || []).length > 0;
                                 return <tr key={stock._id || stock.symbol}>
                                     <td><div className="stocks-instrument"><strong>{stock.companyName}</strong><span>{stock.symbol}</span></div></td>
                                     <td>{stock.exchange}</td>
-                                    <td>₹{formatPrice(stock.currentPrice)}</td>
+                                    <td>₹{formatPrice(currentPrice)}</td>
                                     <td className={change >= 0 ? "stocks-positive" : "stocks-negative"}>{change >= 0 ? "+" : "−"}₹{formatPrice(Math.abs(change))}<small>{changePercent >= 0 ? "+" : ""}{changePercent.toFixed(2)}%</small></td>
                                     <td><div className="stocks-actions">
-                                        <button type="button" className="stocks-buy" onClick={() => general.openOrderWindow(stock, "BUY")}>Buy</button>
-                                        <button type="button" className="stocks-sell" onClick={() => general.openOrderWindow(stock, "SELL")}>Sell</button>
-                                        <button type="button" className={`stocks-watch ${isWatched ? "active" : ""}`} aria-label={`Manage ${stock.symbol} watchlists`} title="Manage watchlists" onClick={() => { setDrawerStock(stock); setError(""); }}>♡</button>
+                                        <button type="button" className="stocks-buy" onClick={() => general.openOrderWindow({ ...stock, name: stock.symbol, price: currentPrice, currentPrice }, "BUY")}>Buy</button>
+                                        <button type="button" className="stocks-sell" onClick={() => general.openOrderWindow({ ...stock, name: stock.symbol, price: currentPrice, currentPrice }, "SELL")}>Sell</button>
+                                        <button type="button" className={`stocks-watch ${isWatched ? "active" : ""}`} aria-label={`Manage ${stock.symbol} watchlists`} title="Manage watchlists" onClick={() => { setDrawerStock({ ...stock, currentPrice, previousClose }); setError(""); }}>♡</button>
                                     </div></td>
                                 </tr>;
                             }) : <tr><td colSpan="5" className="stocks-empty">{error || "No stocks found."}</td></tr>}
@@ -149,7 +187,7 @@ const Stocks = () => {
                     <div className="watchlist-drawer-options">
                         {WATCHLISTS.map((name) => {
                             const isAdded = drawerSelections.includes(name);
-                            return <button key={name} type="button" className={isAdded ? "added" : ""} disabled={Boolean(updatingList)} title={isAdded ? "Remove from watchlist" : `Add to ${name}`} onClick={() => toggleWatchlist(name)}>
+                            return <button key={name} type="button" className={isAdded ? "added" : ""} disabled={Boolean(updatingList) || !selectionsLoaded} title={isAdded ? "Remove from watchlist" : `Add to ${name}`} onClick={() => toggleWatchlist(name)}>
                                 <span>{name}</span><span>{updatingList === name ? "Saving…" : isAdded ? "Added ✓" : "Add +"}</span>
                             </button>;
                         })}

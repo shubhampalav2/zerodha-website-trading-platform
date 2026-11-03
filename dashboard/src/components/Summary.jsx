@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Loader from "../common/Loader/Loader.jsx";
 import { fetchPortfolioData } from "../Services/PortfolioService.js";
 import { setUserName } from "../common/Storage.js";
+import { fetchHoldings } from "../Services/HoldingsService.js";
+import { useLivePrices } from "../context/PriceContext";
 import "./Summary.css";
 
 const Summary = () => {
@@ -9,8 +11,20 @@ const Summary = () => {
     const [loader, setLoader] = useState(false);
 
     const [portfolio, setPortfolio] = useState({});
-
-    const isProfit = portfolio?.pnl >= 0;
+    const [holdings, setHoldings] = useState([]);
+    const { prices } = useLivePrices();
+    const livePortfolio = { ...(holdings.length ? holdings.reduce((result, holding) => {
+        const qty = Number(holding.qty) || 0;
+        const avg = Number(holding.avg) || 0;
+        const candidate = Number(prices[holding.name]?.currentPrice);
+        const fallback = Number(holding.price);
+        result.totalInvestment += avg * qty;
+        result.currentValue += (Number.isFinite(candidate) && candidate > 0 ? candidate : (Number.isFinite(fallback) && fallback > 0 ? fallback : 0)) * qty;
+        return result;
+    }, { ...portfolio, totalInvestment: 0, currentValue: 0 }) : portfolio) };
+    livePortfolio.pnl = (Number(livePortfolio.currentValue) || 0) - (Number(livePortfolio.totalInvestment) || 0);
+    livePortfolio.pnlPercentage = livePortfolio.totalInvestment > 0 ? livePortfolio.pnl / livePortfolio.totalInvestment * 100 : 0;
+    const isProfit = livePortfolio?.pnl >= 0;
 
     const formatCurrency = (value) =>
         new Intl.NumberFormat("en-IN", {
@@ -31,10 +45,19 @@ const Summary = () => {
             const res = await fetchPortfolioData();
             setUserName(res.portfolio.userName);
             setPortfolio(res.portfolio);
+            const firstPage = await fetchHoldings(1);
+            const combinedHoldings = firstPage?.data || [];
+            const pages = Math.ceil((Number(firstPage?.count) || 0) / 10);
+            for (let page = 2; page <= pages; page += 1) {
+                const nextPage = await fetchHoldings(page);
+                combinedHoldings.push(...(nextPage?.data || []));
+            }
+            setHoldings(combinedHoldings);
         }
         catch (error) {
             console.log("Error is ", error);
             setPortfolio({});
+            setHoldings([]);
         }
         finally {
             setLoader(false);
@@ -76,7 +99,7 @@ const Summary = () => {
                             <div>
                                 <p className="summary-label">Current portfolio value</p>
 
-                                <h2>{formatCurrency(portfolio.currentValue)}</h2>
+                                <h2>{formatCurrency(livePortfolio.currentValue)}</h2>
                             </div>
 
                             <div
@@ -84,7 +107,7 @@ const Summary = () => {
                                     }`}
                             >
                                 <span>{isProfit ? "▲" : "▼"}</span>
-                                {formatNumber(Math.abs(portfolio.pnlPercentage))}%
+                                {formatNumber(Math.abs(livePortfolio.pnlPercentage))}%
                             </div>
                         </div>
 
@@ -94,14 +117,14 @@ const Summary = () => {
                             <div>
                                 <span>Total investment</span>
                                 <strong>
-                                    {formatCurrency(portfolio.totalInvestment)}
+                                    {formatCurrency(livePortfolio.totalInvestment)}
                                 </strong>
                             </div>
 
                             <div>
                                 <span>Current value</span>
                                 <strong>
-                                    {formatCurrency(portfolio.currentValue)}
+                                    {formatCurrency(livePortfolio.currentValue)}
                                 </strong>
                             </div>
 
@@ -109,7 +132,7 @@ const Summary = () => {
                                 <span>Overall P&L</span>
                                 <strong className={isProfit ? "profit-text" : "loss-text"}>
                                     {isProfit ? "+" : "-"}
-                                    {formatCurrency(Math.abs(portfolio.pnl))}
+                                    {formatCurrency(Math.abs(livePortfolio.pnl))}
                                 </strong>
                             </div>
                         </div>
@@ -123,7 +146,7 @@ const Summary = () => {
                                 <div className="summary-stat-icon">₹</div>
                             </div>
 
-                            <h3>{formatCurrency(portfolio.totalInvestment)}</h3>
+                            <h3>{formatCurrency(livePortfolio.totalInvestment)}</h3>
                             <p>Amount invested in stocks</p>
                         </div>
 
@@ -133,7 +156,7 @@ const Summary = () => {
                                 <div className="summary-stat-icon">↗</div>
                             </div>
 
-                            <h3>{formatCurrency(portfolio.currentValue)}</h3>
+                            <h3>{formatCurrency(livePortfolio.currentValue)}</h3>
                             <p>Present market value</p>
                         </div>
 
@@ -157,7 +180,7 @@ const Summary = () => {
 
                             <h3 className={isProfit ? "profit-text" : "loss-text"}>
                                 {isProfit ? "+" : "-"}
-                                {formatCurrency(Math.abs(portfolio.pnl))}
+                                {formatCurrency(Math.abs(livePortfolio.pnl))}
                             </h3>
                             <p>Overall returns</p>
                         </div>
@@ -192,7 +215,7 @@ const Summary = () => {
                                 </div>
 
                                 <strong>
-                                    {formatCurrency(portfolio.totalInvestment)}
+                                    {formatCurrency(livePortfolio.totalInvestment)}
                                 </strong>
                             </div>
 
@@ -210,7 +233,7 @@ const Summary = () => {
                                 </div>
 
                                 <strong>
-                                    {formatCurrency(portfolio.currentValue)}
+                                    {formatCurrency(livePortfolio.currentValue)}
                                 </strong>
                             </div>
 
@@ -218,13 +241,13 @@ const Summary = () => {
                                 <div
                                     className="summary-current-bar"
                                     style={{
-                                        width: `${portfolio.totalInvestment > 0
+                                        width: `${livePortfolio.totalInvestment > 0
                                             ? Math.max(
                                                 0,
                                                 Math.min(
                                                     100,
-                                                    (portfolio.currentValue /
-                                                        portfolio.totalInvestment) *
+                                                    (livePortfolio.currentValue /
+                                                        livePortfolio.totalInvestment) *
                                                     100
                                                 )
                                             )

@@ -1,6 +1,8 @@
 const Order = require("../models/OrderModel");
 
 const Holding = require("../models/HoldingModel");
+const Stock = require("../models/StockModel");
+const { getPriceForSymbol } = require("../services/priceSimulator");
 const fetchOrders = async (req, res) => {
     const id = req?.user?.userId;
     console.log("User id ", req.user.userId);
@@ -123,10 +125,15 @@ const createOrder = async (req, res) => {
     }
 
     const orderQty = Number(qty);
-    const orderPrice = Number(price);
     const stockName = name.trim();
 
     try {
+        const simulatedPrice = getPriceForSymbol(stockName);
+        const stock = simulatedPrice ? null : await Stock.findOne({ symbol: stockName }).select("currentPrice").lean();
+        const orderPrice = simulatedPrice ?? Number(stock?.currentPrice);
+        if (!Number.isFinite(orderPrice) || orderPrice <= 0) {
+            return res.status(422).json({ success: false, message: "A valid execution price is unavailable for this stock" });
+        }
         // SELL order validation
         if (orderType === "SELL") {
             const holdings = await Holding.findOne({

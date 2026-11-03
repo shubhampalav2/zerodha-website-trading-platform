@@ -4,11 +4,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./index.css";
 import Home from "./components/Home";
 import { ToastContainer } from "react-toastify";
+import { PriceProvider } from "./context/PriceContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <BrowserRouter>
-        <Home />
-        <ToastContainer />
+        <PriceProvider>
+            <Home />
+            <ToastContainer />
+        </PriceProvider>
     </BrowserRouter>
 );
