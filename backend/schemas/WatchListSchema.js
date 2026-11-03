@@ -12,6 +12,9 @@ const StocksSchema = new mongoose.Schema({
     currentPrice: {
         type: String,
         required: true
+    },
+    previousClose: {
+        type: String,
     }
 }, {
     _id: false

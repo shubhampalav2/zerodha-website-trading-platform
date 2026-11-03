@@ -42,7 +42,7 @@ const fetchWatchlist = async (req, res) => {
 }
 
 const createWatchlist = async (req, res) => {
-    const { name, companyname, exchange, currentPrice } = req.body;
+    const { name, companyname, exchange, currentPrice, previousClose } = req.body;
     const userId = req.user?.userId;
 
     // Validate watchlist name
@@ -89,6 +89,17 @@ const createWatchlist = async (req, res) => {
         });
     }
 
+    // Validate previousClose
+    if (
+        typeof previousClose !== "number" ||
+        !Number.isFinite(previousClose) ||
+        currentPrice < 0
+    ) {
+        return res.status(400).json({
+            success: false,
+            message: "Previous Close must be a valid number"
+        });
+    }
 
     try {
         //find whether watchlist is present or not
@@ -104,7 +115,8 @@ const createWatchlist = async (req, res) => {
                     {
                         companyname,
                         exchange,
-                        currentPrice
+                        currentPrice,
+                        previousClose
                     }
                 ]
             });
@@ -113,7 +125,8 @@ const createWatchlist = async (req, res) => {
             watchListData.stocks.push({
                 companyname,
                 exchange,
-                currentPrice
+                currentPrice,
+                previousClose
             });
             await watchListData.save();
         }

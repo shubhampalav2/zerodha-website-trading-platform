@@ -20,12 +20,7 @@ const fetchOrders = async (req, res) => {
                 message: "Page and limit must contain numbers only"
             });
         }
-        if (!status) {
-            return res.status(422).json({
-                success: false,
-                message: "Status is required"
-            });
-        }
+
         page = Number(page) || 1;
         limit = Number(limit) || 10;
 
@@ -36,9 +31,15 @@ const fetchOrders = async (req, res) => {
             });
         }
         const offset = (page - 1) * limit;
+        let query = {
+            userId: id
+        }
+        if (status) {
+            query.status = status;
+        }
         //Fetching the orders for particular user and counting the total orders
-        const [orders, totalOrders] = await Promise.all([Order.find({ userId: id, status }).skip(offset).limit(limit),
-        Order.countDocuments({ userId: id })]);
+        const [orders, totalOrders] = await Promise.all([Order.find(query).skip(offset).limit(limit),
+        Order.countDocuments(query)]);
 
         if (totalOrders === 0) {
             return res.status(201).json({
@@ -173,6 +174,8 @@ const createOrder = async (req, res) => {
             } else {
                 // Sell partial shares
                 holdings.qty -= orderQty;
+                // Update current market price
+                holdings.price = orderPrice;
                 await holdings.save();
             }
         }
@@ -194,6 +197,7 @@ const createOrder = async (req, res) => {
 
                 holdings.qty = totalQty;
                 holdings.avg = averagePrice;
+                holdings.price = orderPrice;
 
                 await holdings.save();
             } else {
