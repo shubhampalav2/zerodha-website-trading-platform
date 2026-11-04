@@ -6,7 +6,7 @@ export default function Awards() {
             </div>
             <div className="col-12 col-lg-6 mt-4 p-5 text-center">
                 <h2>Largest stock broker in India</h2>
-                <p>2+ million Zerodha clients contribute to over 15% of all retail
+                <p>Investors deserve clear tools and reliable access to the markets.
                     order volumes in India daily by trading and investing in:</p>
                 <div className="row">
                     <div className="col-6">

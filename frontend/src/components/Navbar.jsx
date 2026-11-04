@@ -4,7 +4,7 @@ const Navbar = () => {
     return <nav className="site-navbar navbar navbar-expand-lg border-bottom">
         <div className="container">
             <NavLink className="navbar-brand" to="/">
-                <img src="/images/logo.svg" alt="Zerodha" className="logo-img" />
+                <img src="/images/logo.svg" alt="TangelTrader" className="logo-img" />
             </NavLink>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>

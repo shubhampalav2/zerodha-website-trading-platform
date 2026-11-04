@@ -459,3 +459,25 @@
         padding: 16px;
     }
 }
+
+@media (max-width: 768px) {
+    .summary-container {
+        padding-bottom: 40px;
+    }
+
+    .summary-performance-content {
+        padding: 14px 16px;
+    }
+
+    .summary-performance-item {
+        margin-bottom: 8px;
+    }
+
+    .summary-performance-bar {
+        margin-bottom: 12px;
+    }
+
+    .summary-current-bar {
+        min-width: 3px;
+    }
+}

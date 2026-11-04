@@ -26,7 +26,7 @@ export default function NotFound() {
                 className="home-link"
                 onClick={handleRedirect}
             >
-                Visit Zerodha's home page
+                Visit TangelTrader's home page
             </button>
 
         </div>

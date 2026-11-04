@@ -57,3 +57,91 @@
     .stocks-pagination div { align-self: flex-end; }
     .watchlist-drawer { padding: 18px; }
 }
+
+
+@media (max-width: 768px) {
+    .stocks-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        padding: 10px;
+    }
+
+    .stocks-header {
+        flex: 0 0 auto;
+        margin-bottom: 12px;
+    }
+
+    .stocks-card {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .stocks-table-scroll {
+        flex: 1 1 auto;
+        min-height: 0;
+        max-height: none;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .stocks-table-scroll {
+        padding-bottom: 68px;
+    }
+
+    .stocks-pagination {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 30;
+        display: flex;
+        flex: 0 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+        background: #ffffff;
+        box-shadow: 0 -4px 14px rgba(15, 23, 42, .12);
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+}
+
+
+@media (max-width: 768px) {
+    .stocks-pagination {
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+    }
+
+    .stocks-pagination > span {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 11px;
+    }
+
+    .stocks-pagination div {
+        flex: 0 0 auto;
+        align-self: auto;
+        gap: 5px;
+    }
+
+    .stocks-pagination button {
+        min-height: 32px;
+        padding: 0 8px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .stocks-pagination strong {
+        min-width: 28px;
+        height: 30px;
+    }
+}

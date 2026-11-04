@@ -41,7 +41,7 @@ const port = process.env.PORT || process.env.port || 7000;
 
 //Default route
 app.get('/', (req, res) => {
-    res.send("Welcome to Zerodha Server");
+    res.send("Welcome to TangelTrader Server");
 })
 
 async function startServer() {

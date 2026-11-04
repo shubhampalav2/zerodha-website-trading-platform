@@ -150,7 +150,7 @@ const signUpHandler = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: "User successfully registered to Zerodha account",
+            message: "User successfully registered to TangelTrader account",
             authToken: token
         })
     }

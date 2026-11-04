@@ -440,3 +440,95 @@
         flex: 1;
     }
 }
+
+
+/* Keep pagination in view on short mobile screens by scrolling table rows inside the card. */
+@media (max-width: 768px) {
+    .holdings-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        padding: 10px;
+    }
+
+    .holdings-header {
+        flex: 0 0 auto;
+        margin-bottom: 12px;
+    }
+
+    .holdings-table-card {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .holdings-table-wrapper {
+        flex: 1 1 auto;
+        min-height: 0;
+        max-height: none;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .holdings-pagination {
+        position: static;
+        flex: 0 0 auto;
+        background: #ffffff;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .holdings-table-wrapper {
+        padding-bottom: 72px;
+    }
+
+    .holdings-pagination {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 30;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px 12px max(10px, env(safe-area-inset-bottom));
+        border-top: 1px solid #e2e8f0;
+        background: #ffffff;
+        box-shadow: 0 -4px 14px rgba(15, 23, 42, .12);
+    }
+
+    .pagination-info {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 11px;
+    }
+
+    .pagination-controls {
+        flex: 0 0 auto;
+        gap: 5px;
+    }
+
+    .pagination-btn {
+        flex: 0 0 auto;
+        min-height: 32px;
+        padding: 0 8px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .pagination-current {
+        min-width: 28px;
+        height: 30px;
+    }
+}

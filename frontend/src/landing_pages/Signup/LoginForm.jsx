@@ -47,7 +47,7 @@ const LoginForm = ({ setAuthMode, mainRef }) => {
         <div className="auth-card">
             <h2 className="auth-title">Login</h2>
             <p className="auth-subtitle">
-                Access your Zerodha trading account
+                Access your TangelTrader trading account
             </p>
 
             <form onSubmit={handleSubmit(submit)}>
@@ -83,7 +83,7 @@ const LoginForm = ({ setAuthMode, mainRef }) => {
 
             <div className="text-center mt-4">
                 <p className="mb-2">
-                    New to Zerodha?
+                    New to TangelTrader?
                 </p>
 
                 <button

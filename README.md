@@ -1,6 +1,6 @@
-# 🚀 Zerodha Clone
+# 🚀 TangelTrader
 
-A responsive **Zerodha Clone** built using **React.js** that replicates the core landing pages of the Zerodha website. The project focuses on reusable components, responsive design, React Router navigation, and modern frontend development practices.
+A responsive **TangelTrader** built using **React.js** that provides a responsive trading and investment platform experience. The project focuses on reusable components, responsive design, React Router navigation, and modern frontend development practices.
 
 ## 🔥 Tech Stack
 
@@ -75,7 +75,7 @@ Contains company information, mission, and statistics.
 
 ### 💻 Products Page
 
-Displays Zerodha products with reusable product components.
+Displays TangelTrader products with reusable product components.
 
 ![Products](image-8.png)
 
@@ -134,13 +134,13 @@ src
 Clone the repository
 
 ```bash
-git clone https://github.com/your-username/zerodha-clone.git
+git clone https://github.com/your-username/tangeltrader.git
 ```
 
 Move to project folder
 
 ```bash
-cd zerodha-clone
+cd tangeltrader
 ```
 
 Install dependencies
@@ -196,7 +196,7 @@ This project helped me understand:
 
 ## 📌 Future Scope
 
-This project is currently focused on the frontend. The next phase will involve building a complete **full-stack Zerodha Clone** using:
+This project is currently focused on the frontend. The next phase will involve building a complete **full-stack TangelTrader platform** using:
 
 - React
 - Node.js

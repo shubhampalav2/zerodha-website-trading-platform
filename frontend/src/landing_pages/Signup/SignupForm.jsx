@@ -57,7 +57,7 @@ const SignupForm = ({ setAuthMode, mainRef }) => {
         <div className="auth-card">
             <h2 className="auth-title">Create Account</h2>
             <p className="auth-subtitle">
-                Start your investment journey with Zerodha
+                Start your investment journey with TangelTrader
             </p>
 
             <form onSubmit={handleSubmit(submit)}>

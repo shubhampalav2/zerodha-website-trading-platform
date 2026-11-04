@@ -56,7 +56,7 @@ function Brokerage() {
                         style={{ lineHeight: "2", fontSize: "0.9rem" }}
                     >
                         <li>
-                            When trading at Zerodha, STT/CTT can be a lot more than the
+                            When trading at TangelTrader, STT/CTT can be a lot more than the
                             brokerage we charge. Important to keep a tab.
                         </li>
                         <li>

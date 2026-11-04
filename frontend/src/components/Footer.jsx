@@ -11,7 +11,7 @@ const Footer = () => {
                         className="img-fluid"
                         style={{ maxWidth: "180px" }}
                     />
-                    <p className="mt-2">© 2010 - 2026, Zerodha Broking Ltd.All rights reserved.</p>
+                    <p className="mt-2">© 2010 - 2026, TangelTrader Broking Ltd.All rights reserved.</p>
                 </div>
 
                 {/* Account */}
@@ -19,13 +19,13 @@ const Footer = () => {
                     <h6 className="fw-bold mb-3">Account</h6>
 
                     <div className="d-flex flex-column gap-2">
-                        <a href="https://zerodha.com/open-account/" target="_blank" rel="noreferrer" className="nav-links">
+                        <a href="#" target="_blank" rel="noreferrer" className="nav-links">
                             Open demat account
                         </a>
-                        <a href="https://zerodha.com/open-account/minor/" target="_blank" rel="noreferrer" className="nav-links">
+                        <a href="#" target="_blank" rel="noreferrer" className="nav-links">
                             Minor demat account
                         </a>
-                        <a href="https://zerodha.com/open-account/nri/" target="_blank" rel="noreferrer" className="nav-links">
+                        <a href="#" target="_blank" rel="noreferrer" className="nav-links">
                             NRI demat account
                         </a>
                         <a href="#" className="nav-links">HUF demat account</a>
@@ -41,8 +41,8 @@ const Footer = () => {
                     <h6 className="fw-bold mb-3">Support</h6>
 
                     <div className="d-flex flex-column gap-2">
-                        <a href="https://zerodha.com/contact/" target="_blank" className="nav-links">Contact Us</a>
-                        <a href="https://support.zerodha.com/" target="_blank" className="nav-links">Support portal</a>
+                        <a href="#" target="_blank" className="nav-links">Contact Us</a>
+                        <a href="#" target="_blank" className="nav-links">Support portal</a>
                         <a href="#" className="nav-links">How to file a complaint?</a>
                         <a href="#" className="nav-links">Status of your complaints</a>
                         <a href="#" className="nav-links">Bulletin</a>
@@ -61,7 +61,7 @@ const Footer = () => {
                         <a href="#" className="nav-links">Philosophy</a>
                         <a href="#" className="nav-links">Press & Media</a>
                         <a href="#" className="nav-links">Careers</a>
-                        <a href="#" className="nav-links">Zerodha Cares (CSR)</a>
+                        <a href="#" className="nav-links">TangelTrader Cares (CSR)</a>
                     </div>
                 </div>
 

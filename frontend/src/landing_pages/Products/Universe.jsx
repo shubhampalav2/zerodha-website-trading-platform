@@ -10,7 +10,7 @@ function Universe() {
         <div className="container my-5">
             <div className="row text-center">
                 <div className="col-12 mb-4">
-                    <h1>The Zerodha Universe</h1>
+                    <h1>The TangelTrader Universe</h1>
                     <p>
                         Extend your trading and investment experience even further with our
                         partner platforms
@@ -20,10 +20,10 @@ function Universe() {
                 {/* Card 1 */}
                 <div
                     className="col-12 col-sm-6 col-lg-4 mb-5"
-                    onClick={() => redirect("https://www.zerodhafundhouse.com/")}
+                    onClick={() => redirect("#")}
                     style={{ cursor: "pointer" }}
                 >
-                    <img src="/images/zerodhaFundhouse.png" className="universe-img" />
+                    <img src="/images/fundhouse.png" className="universe-img" />
                     <p className="text-small text-muted mt-3">
                         Our asset management venture that is creating simple and transparent
                         index funds to help you save for your goals.
@@ -75,7 +75,7 @@ function Universe() {
                 {/* Card 5 */}
                 <div
                     className="col-12 col-sm-6 col-lg-4 mb-5"
-                    onClick={() => redirect("https://smallcase.zerodha.com/")}
+                    onClick={() => redirect("#")}
                     style={{ cursor: "pointer" }}
                 >
                     <img src="/images/smallcaseLogo.png" className="universe-img" />

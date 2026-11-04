@@ -477,3 +477,99 @@
         flex: 1;
     }
 }
+
+/* Keep pagination in view on short mobile screens by scrolling table rows inside the card. */
+@media (max-width: 768px) {
+    .orders-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        padding: 10px;
+    }
+
+    .orders-header {
+        flex: 0 0 auto;
+        margin-bottom: 12px;
+    }
+
+    .orders-filter-container {
+        flex: 0 0 auto;
+        margin-bottom: 12px;
+    }
+
+    .orders-table-card {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .orders-table-wrapper {
+        flex: 1 1 auto;
+        min-height: 0;
+        max-height: none;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .orders-pagination {
+        position: static;
+        flex: 0 0 auto;
+        background: #ffffff;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .orders-table-wrapper {
+        padding-bottom: 72px;
+    }
+
+    .orders-pagination {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 30;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px 12px max(10px, env(safe-area-inset-bottom));
+        border-top: 1px solid #e2e8f0;
+        background: #ffffff;
+        box-shadow: 0 -4px 14px rgba(15, 23, 42, .12);
+    }
+
+    .orders-pagination-info {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 11px;
+    }
+
+    .orders-pagination-controls {
+        flex: 0 0 auto;
+        gap: 5px;
+    }
+
+    .orders-pagination-btn {
+        flex: 0 0 auto;
+        min-height: 32px;
+        padding: 0 8px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .orders-pagination-current {
+        min-width: 28px;
+        height: 30px;
+    }
+}

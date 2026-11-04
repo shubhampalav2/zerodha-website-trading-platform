@@ -6,7 +6,7 @@ export default function Stats() {
                 <h1 className="fs-2 mb-4 mb-md-5">Trust with confidence</h1>
                 <h2 className="fs-4">Customer-first always</h2>
                 <p className="text-muted">
-                    That's why 1.3+ crore customers trust Zerodha with ₹3.5+ lakh crores
+                    That's why 1.3+ crore customers trust TangelTrader with ₹3.5+ lakh crores
                     worth of equity investments.
                 </p>
                 <h2 className="fs-4">No spam or gimmicks</h2>
@@ -14,7 +14,7 @@ export default function Stats() {
                     No gimmicks, spam, "gamification", or annoying push notifications.
                     High quality apps that you use at your pace, the way you like.
                 </p>
-                <h2 className="fs-4">The Zerodha universe</h2>
+                <h2 className="fs-4">The TangelTrader universe</h2>
                 <p className="text-muted">
                     Not just an app, but a whole ecosystem. Our investments in 30+
                     fintech startups offer you tailored services specific to your needs.
@@ -27,14 +27,14 @@ export default function Stats() {
                 </p>
             </div>
             <div className="col-12 col-lg-6 stats-visual">
-                <img src="/images/ecosystem.png" className="stats-img" alt="Zerodha ecosystem" />
+                <img src="/images/ecosystem.png" className="stats-img" alt="TangelTrader ecosystem" />
                 <div className="stats-links text-center">
                     <Link to="/products" className="stats-link" style={{ textDecoration: "none" }}>
                         Explore our products{" "}
                         <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
                     </Link>
-                    <a href="https://kite-demo.zerodha.com/dashboard" className="stats-link" style={{ textDecoration: "none" }} target="_blank" rel="noreferrer">
-                        Try Kite demo{" "}
+                    <a href="/signup" className="stats-link" style={{ textDecoration: "none" }} target="_blank" rel="noreferrer">
+                        Get started with TangelTrader{" "}
                         <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
                     </a>
                 </div>

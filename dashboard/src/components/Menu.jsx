@@ -16,6 +16,7 @@ const Menu = () => {
 
     const isMobile = window.innerWidth < 767;
 
+
     useEffect(() => {
         setUsername(getUserName());
     }, [getUserName()]);
@@ -28,7 +29,7 @@ const Menu = () => {
     };
 
     const handleProfileClick = () => {
-        setIsProfileDropdownOpen(!isProfileDropdownOpen);
+        setIsProfileDropdownOpen((isOpen) => !isOpen);
     };
 
     const menuClass = "menu";
@@ -37,9 +38,7 @@ const Menu = () => {
     return (
         <div className="menu-container">
             <img src="logo.png" style={{ width: "50px" }} />
-            <div className="hamburger" onClick={() => setMobileMenu(!mobileMenu)}>
-                ☰
-            </div>
+            <button type="button" className="hamburger" aria-label={mobileMenu ? "Close navigation menu" : "Open navigation menu"} aria-expanded={mobileMenu} onClick={() => setMobileMenu((isOpen) => !isOpen)}>&#9776;</button>
             <div className={`menus ${mobileMenu ? 'active' : ''}`}>
                 <ul>
                     <li>

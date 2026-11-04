@@ -74,3 +74,9 @@
         max-height: 36dvh;
     }
 }
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        height: calc(100dvh - 10vh);
+    }
+}
