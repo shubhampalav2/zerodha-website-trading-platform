@@ -36,6 +36,7 @@ const WatchList = () => {
     const [activeWatchlist, setActiveWatchlist] = useState("Watchlist 1");
     const [sortBy, setSortBy] = useState("default");
     const [selectedStock, setSelectedStock] = useState(null);
+    const [mobileOpen, setMobileOpen] = useState(false);
 
 
     const sortedStocks = useMemo(() => {
@@ -57,6 +58,7 @@ const WatchList = () => {
     }, [watchlist, sortBy, prices]);
 
     const [loader, setLoader] = useState(false);
+    const [loadError, setLoadError] = useState("");
     const [removingStock, setRemovingStock] = useState(null);
 
     const removeStock = async (stock) => {
@@ -95,12 +97,14 @@ const WatchList = () => {
     async function fetchWatchList(watchlistName) {
         try {
             setLoader(true);
+            setLoadError("");
             const res = await fetchWatchlistData(watchlistName);
             const data = res?.data;
             setWatchlist(data);
         }
         catch (error) {
             console.log("Error ", error);
+            setLoadError(error?.response?.data?.message || "Could not load this watchlist. Please try again.");
             setWatchlist({});
         }
         finally {
@@ -124,8 +128,19 @@ const WatchList = () => {
         return () => window.removeEventListener("watchlist-updated", handleWatchlistUpdate);
     }, [activeWatchlist]);
 
+    useEffect(() => {
+        const toggle = () => setMobileOpen((value) => !value);
+        const close = () => setMobileOpen(false);
+        window.addEventListener("toggle-mobile-watchlist", toggle);
+        window.addEventListener("close-mobile-watchlist", close);
+        return () => {
+            window.removeEventListener("toggle-mobile-watchlist", toggle);
+            window.removeEventListener("close-mobile-watchlist", close);
+        };
+    }, []);
+
     return (
-        <aside className="watchlist-container">
+        <aside className={`watchlist-container ${mobileOpen ? "mobile-open" : ""}`}>
             <div className="watchlist-topbar">
                 <button
                     type="button"
@@ -207,8 +222,8 @@ const WatchList = () => {
                 ) : loader ?
                     <Loader />
                     : (
-                        <div className="watchlist-empty">
-                            No stocks in this watchlist.
+                        <div className={`watchlist-empty ${loadError ? "watchlist-error" : ""}`} role={loadError ? "alert" : undefined}>
+                            {loadError || "No stocks in this watchlist."}
                         </div>
                     )}
             </div>

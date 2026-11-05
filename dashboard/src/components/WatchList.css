@@ -274,6 +274,10 @@
     .watchlist-topbar {
         padding: 0 12px;
     }
+
+    .watchlist-stock-row { flex-wrap: wrap; }
+    .watchlist-stock-actions { position: static; opacity: 1; pointer-events: auto; margin-left: auto; }
+    .watchlist-stock-row:hover .watchlist-stock-quote { opacity: 1; }
 }
 
 @media (max-width: 380px) {

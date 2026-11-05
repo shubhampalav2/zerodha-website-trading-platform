@@ -1,14 +1,1 @@
-import React from 'react';
-import Hero from "./Hero";
-import CreateTicket from "./RaiseTicket";
-
-const SupportPage = () => {
-  return (
-    <>
-      <Hero />
-      <CreateTicket />
-    </>
-  );
-};
-
-export default SupportPage;
+export default function SupportPage(){return <main className="simple-public-page"><span className="eyebrow">CONTACT</span><h1>A personal learning project.</h1><p>This demonstration does not provide customer support or brokerage services. For project details, visit the repository where you found TangelTrader.</p><a className="primary-cta" href="/#about">About the project →</a></main>}

@@ -3,7 +3,8 @@ export const getAccessToken = () => {
 }
 
 export const setUserName = (value) => {
-    return localStorage.setItem("username", value);
+    localStorage.setItem("username", value);
+    window.dispatchEvent(new CustomEvent("username-updated", { detail: value }));
 }
 
 

@@ -14,18 +14,16 @@ const Menu = () => {
 
     const [username, setUsername] = useState("");
 
-    const isMobile = window.innerWidth < 767;
-
-
     useEffect(() => {
         setUsername(getUserName());
-    }, [getUserName()]);
+        const syncUsername = (event) => setUsername(event.detail || getUserName() || "");
+        window.addEventListener("username-updated", syncUsername);
+        return () => window.removeEventListener("username-updated", syncUsername);
+    }, []);
 
     const handleMenuClick = (index) => {
         setSelectedMenu(index);
-        if (isMobile) {
-            setMobileMenu(!mobileMenu);
-        }
+        setMobileMenu(false);
     };
 
     const handleProfileClick = () => {
@@ -37,7 +35,6 @@ const Menu = () => {
 
     return (
         <div className="menu-container">
-            <img src="logo.png" style={{ width: "50px" }} />
             <button type="button" className="hamburger" aria-label={mobileMenu ? "Close navigation menu" : "Open navigation menu"} aria-expanded={mobileMenu} onClick={() => setMobileMenu((isOpen) => !isOpen)}>&#9776;</button>
             <div className={`menus ${mobileMenu ? 'active' : ''}`}>
                 <ul>
@@ -88,14 +85,14 @@ const Menu = () => {
                 </ul>
                 <hr />
                 <div className="profile" onClick={handleProfileClick}>
-                    <div className="avatar">ZU</div>
+                    <div className="avatar">{username ? username.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() : "TT"}</div>
                 </div>
                 {isProfileDropdownOpen && <div className="profile-dropdown">
                     <div className="dropdown-header">
-                        <div className="avatar large">ZU</div>
+                        <div className="avatar large">{username ? username.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() : "TT"}</div>
 
                         <div>
-                            <h4>User Name</h4>
+                            <h4>{username || "Your account"}</h4>
                             <p>{username}</p>
                         </div>
                     </div>

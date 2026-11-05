@@ -6,6 +6,7 @@ import RegexStore from "../../utils/RegexStore";
 import { signUp } from "../../services/AuthService";
 import toast from 'react-hot-toast';
 const SignupForm = ({ setAuthMode, mainRef }) => {
+    const [showPassword, setShowPassword] = useState(false);
 
     //creating a singup schema
     const signupSchema = yup.object({
@@ -103,32 +104,18 @@ const SignupForm = ({ setAuthMode, mainRef }) => {
 
                 <div className="mb-3">
                     <label className="form-label" htmlFor="password">Password</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        placeholder="Create a password"
-                        id="password"
-                        autoComplete="off"
-                        {...register("password")}
-                    />
+                    <div className="auth-password-wrap"><input type={showPassword ? "text" : "password"} className="form-control" placeholder="Create a password" id="password" autoComplete="new-password" {...register("password")} /><button type="button" className="auth-password-toggle" onClick={() => setShowPassword(value => !value)}>{showPassword ? "Hide" : "Show"}</button></div>
                     <span className="err-msg">{errors?.password?.message}</span>
                 </div>
 
                 <div className="mb-4">
                     <label className="form-label" htmlFor="conformPassword">Confirm Password</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        placeholder="Confirm your password"
-                        id="conformPassword"
-                        autoComplete="off"
-                        {...register("conformPassword")}
-                    />
+                    <div className="auth-password-wrap"><input type={showPassword ? "text" : "password"} className="form-control" placeholder="Confirm your password" id="conformPassword" autoComplete="new-password" {...register("conformPassword")} /><button type="button" className="auth-password-toggle" onClick={() => setShowPassword(value => !value)}>{showPassword ? "Hide" : "Show"}</button></div>
                     <span className="err-msg">{errors?.conformPassword?.message}</span>
                 </div>
 
                 <button type="submit" className="btn auth-btn" disabled={loading}>
-                    Create Account
+                    {loading ? "Creating account…" : "Create Account"}
                 </button>
             </form>
 

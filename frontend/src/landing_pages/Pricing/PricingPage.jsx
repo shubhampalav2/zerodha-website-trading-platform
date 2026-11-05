@@ -1,16 +1,1 @@
-import React from "react";
-import Hero from "./Hero";
-import Brokerage from "./Brokerage";
-import OpenAccount from "../../components/OpenAccount";
-
-function PricingPage() {
-    return (
-        <>
-            <Hero />
-            <OpenAccount />
-            <Brokerage />
-        </>
-    );
-}
-
-export default PricingPage;
+export default function PricingPage(){return <main className="simple-public-page"><span className="eyebrow">PROJECT DETAILS</span><h1>No brokerage fees or payments.</h1><p>TangelTrader is a learning and demonstration project. It does not provide deposits, withdrawals, brokerage services or real financial transactions.</p><a className="primary-cta" href="/signup">Explore the demo →</a></main>}

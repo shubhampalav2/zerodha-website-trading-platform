@@ -7,8 +7,8 @@ const PAGE_SIZE = 10;
 
 const FILTERS = [
     { label: "All Orders", value: "" },
-    { label: "Completed Orders", value: "COMPLETED" },
     { label: "Rejected Orders", value: "REJECTED" },
+    { label: "Completed Orders", value: "COMPLETED" },
 ];
 
 const Orders = () => {
@@ -19,6 +19,7 @@ const Orders = () => {
     const [activeFilter, setActiveFilter] = useState("");
 
     const [loader, setLoader] = useState(false);
+    const [fetchError, setFetchError] = useState("");
 
     const totalPages = Math.ceil(ordersCount / PAGE_SIZE);
 
@@ -26,6 +27,7 @@ const Orders = () => {
     const fetchOrders = useCallback(async (pageNo, status) => {
         try {
             setLoader(true);
+            setFetchError("");
 
             const res = await fetchOrderData(pageNo, status);
 
@@ -33,6 +35,7 @@ const Orders = () => {
             setOrdersCount(res?.count || 0);
         } catch (error) {
             console.error("Error fetching orders:", error);
+            setFetchError(error?.response?.data?.message || "Could not load orders. Please try again.");
 
             setOrders([]);
             setOrdersCount(0);
@@ -300,13 +303,13 @@ const Orders = () => {
                                             </div>
 
                                             <h4>
-                                                No orders found
+                                                {fetchError ? "Orders unavailable" : "No orders found"}
                                             </h4>
 
                                             <p>
-                                                {activeFilter === "ALL"
+                                                {fetchError || (!activeFilter || activeFilter === "ALL"
                                                     ? "You haven't placed any orders yet."
-                                                    : `There are no ${activeFilter.toLowerCase()} orders to display.`}
+                                                    : `There are no ${activeFilter.toLowerCase()} orders to display.`)}
                                             </p>
 
                                         </div>

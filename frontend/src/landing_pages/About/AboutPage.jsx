@@ -1,14 +1,2 @@
-import React from 'react';
-import Hero from "./Hero";
-import Team from "./Team";
-
-const AboutPage = () => {
-    return (
-        <>
-            <Hero />
-            <Team />
-        </>
-    );
-};
-
-export default AboutPage;
+import { Link } from 'react-router-dom';
+export default function AboutPage(){return <main className="simple-public-page"><span className="eyebrow">ABOUT THE PROJECT</span><h1>Learning through a real product.</h1><p>TangelTrader is a personal development and demonstration project built to explore full-stack development, portfolio data and real-time communication. The interface uses simulated prices and does not connect to an exchange or brokerage.</p><Link className="primary-cta" to="/signup">Explore the workspace →</Link></main>}

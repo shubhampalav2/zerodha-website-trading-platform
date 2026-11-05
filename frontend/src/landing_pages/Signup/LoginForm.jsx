@@ -6,6 +6,7 @@ import RegexStore from "../../utils/RegexStore";
 import { login } from "../../services/AuthService";
 import toast from 'react-hot-toast';
 const LoginForm = ({ setAuthMode, mainRef }) => {
+    const [showPassword, setShowPassword] = useState(false);
 
     //creating a yup schema
     const loginSchema = yup.object({
@@ -66,18 +67,12 @@ const LoginForm = ({ setAuthMode, mainRef }) => {
 
                 <div className="form-group mt-3">
                     <label htmlFor="password">Password</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        placeholder="Enter your password"
-                        id="password"
-                        {...register("password")}
-                    />
+                    <div className="auth-password-wrap"><input type={showPassword ? "text" : "password"} className="form-control" placeholder="Enter your password" id="password" {...register("password")} /><button type="button" className="auth-password-toggle" onClick={() => setShowPassword(value => !value)}>{showPassword ? "Hide" : "Show"}</button></div>
                     <span className="err-msg">{errors?.password?.message}</span>
                 </div>
 
                 <button className="btn auth-btn mt-4" disabled={loading}>
-                    Login
+                    {loading ? "Signing in…" : "Login"}
                 </button>
             </form>
 

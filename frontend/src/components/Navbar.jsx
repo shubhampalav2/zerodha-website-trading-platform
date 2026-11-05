@@ -1,35 +1,17 @@
-import { NavLink } from "react-router-dom";
+import { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 
-const Navbar = () => {
-    return <nav className="site-navbar navbar navbar-expand-lg border-bottom">
-        <div className="container">
-            <NavLink className="navbar-brand" to="/">
-                <img src="/images/logo.svg" alt="TangelTrader" className="logo-img" />
-            </NavLink>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
-                        <NavLink className="nav-link" aria-current="page" to="/signup">Signup</NavLink>
-                    </li>
-                    <li className="nav-item">
-                        <NavLink className="nav-link" to="/about">About</NavLink>
-                    </li>
-                    <li className="nav-item">
-                        <NavLink className="nav-link" to="/products">Products</NavLink>
-                    </li>
-                    <li className="nav-item">
-                        <NavLink className="nav-link" to="/charges">Pricing</NavLink>
-                    </li>
-                    <li className="nav-item">
-                        <NavLink className="nav-link" to="/support">Support</NavLink>
-                    </li>
-                </ul>
+export default function Navbar() {
+    const [open, setOpen] = useState(false);
+    const close = () => setOpen(false);
+    return <nav className="site-navbar">
+        <div className="site-nav-inner">
+            <Link className="brand-lockup" to="/" onClick={close}><span className="brand-symbol">T</span><span>Tangel<span>Trader</span></span></Link>
+            <button className="nav-toggle" aria-label={open ? 'Close navigation' : 'Open navigation'} aria-expanded={open} onClick={() => setOpen(value => !value)}><span/><span/><span/></button>
+            <div className={`site-nav-links ${open ? 'is-open' : ''}`}>
+                <a href="/#home" onClick={close}>Home</a><a href="/#features" onClick={close}>Features</a><a href="/#about" onClick={close}>About</a><NavLink to="/support" onClick={close}>Contact</NavLink>
+                <Link className="nav-login" to="/signup" onClick={close}>Login</Link><Link className="nav-start" to="/signup" onClick={close}>Get started <span>→</span></Link>
             </div>
         </div>
-    </nav>
+    </nav>;
 }
-
-export default Navbar;

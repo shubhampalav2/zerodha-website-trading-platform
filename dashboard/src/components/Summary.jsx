@@ -195,7 +195,24 @@ const Summary = () => {
 
                             <span>{portfolio.totalHoldings} Stocks</span>
                         </div>
-
+                        <div className="summary-table-wrapper">
+                            <table className="summary-holdings-table">
+                                <thead><tr><th>Instrument</th><th>Qty.</th><th>Avg. cost</th><th>Current value</th><th>P&L</th></tr></thead>
+                                <tbody>{holdings.slice(0, 5).map((holding) => {
+                                    const qty = Number(holding.qty) || 0;
+                                    const avg = Number(holding.avg) || 0;
+                                    const streamed = Number(prices[holding.name]?.currentPrice);
+                                    const fallback = Number(holding.price);
+                                    const current = Number.isFinite(streamed) && streamed > 0 ? streamed : (Number.isFinite(fallback) && fallback > 0 ? fallback : 0);
+                                    const pnl = (current - avg) * qty;
+                                    return <tr key={holding._id || holding.name}>
+                                        <td><div className="summary-stock-name"><strong>{holding.name}</strong><span>{holding.exchange || "NSE"}</span></div></td>
+                                        <td>{qty}</td><td>{formatCurrency(avg)}</td><td>{formatCurrency(current * qty)}</td>
+                                        <td><strong className={pnl >= 0 ? "profit-text" : "loss-text"}>{pnl >= 0 ? "+" : "−"}{formatCurrency(Math.abs(pnl))}</strong></td>
+                                    </tr>;
+                                })}{holdings.length === 0 && <tr><td colSpan="5">No holdings to display yet.</td></tr>}</tbody>
+                            </table>
+                        </div>
                     </section>
 
                     {/* Portfolio Performance */}
