@@ -41,7 +41,6 @@ function getPriceForSymbol(symbol) {
 
 function startPriceSimulator(onUpdate) {
     if (simulatorInterval) return simulatorInterval;
-    if (!prices.size) throw new Error("Price simulator must be initialized before it is started");
     simulatorInterval = setInterval(() => {
         for (const [symbol, stock] of prices) {
             const movement = (Math.random() - 0.5) * MAX_PERCENTAGE_MOVEMENT;

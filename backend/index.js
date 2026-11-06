@@ -7,6 +7,8 @@ const http = require("http");
 const { dbConnection } = require("./config/dbConnect");
 const { initializePriceSimulator } = require("./services/priceSimulator");
 const { initializeSocket } = require("./sockets/socket");
+const Stock = require("./models/StockModel");
+const stockData = require("./data");
 
 const authRoutes = require("./routes/auth.routes");
 const stockRoutes = require("./routes/stocks.routes");
@@ -48,6 +50,15 @@ async function startServer() {
     try {
         await dbConnection();
         console.log("Database connected");
+
+        // The bundled stock list is the initial dataset for a fresh database.
+        // Keep existing collections intact; only seed when there are no stocks.
+        const stockCount = await Stock.countDocuments();
+        if (stockCount === 0) {
+            await Stock.insertMany(stockData);
+            console.log(`Seeded ${stockData.length} stocks`);
+        }
+
         await initializePriceSimulator();
         const server = http.createServer(app);
         initializeSocket(server);
