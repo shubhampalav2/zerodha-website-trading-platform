@@ -7,6 +7,7 @@ import { removeStockFromWatchlist } from "../Services/StocksService";
 import GeneralContext from "./GeneralContext";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useLivePrices } from "../context/PriceContext";
+import { toast } from "react-toastify";
 
 const initialWatchlist = {
     id: 1,
@@ -66,11 +67,12 @@ const WatchList = () => {
         if (removingStock) return;
         setRemovingStock(key);
         try {
-            await removeStockFromWatchlist({
+            const response = await removeStockFromWatchlist({
                 name: activeWatchlist,
                 companyname: stock.companyname,
                 exchange: stock.exchange,
             });
+            toast.success(response?.message || "Stock removed from watchlist.");
             try {
                 const selections = JSON.parse(localStorage.getItem(WATCHLIST_STORAGE_KEY) || "{}");
                 const symbol = String(stock.companyname || "").toUpperCase();
@@ -89,6 +91,7 @@ const WatchList = () => {
             window.dispatchEvent(new CustomEvent("watchlist-updated", { detail: { name: activeWatchlist } }));
         } catch (error) {
             console.error("Could not remove stock from watchlist:", error);
+            toast.error(error?.response?.data?.message || "Could not remove stock from watchlist.");
         } finally {
             setRemovingStock(null);
         }

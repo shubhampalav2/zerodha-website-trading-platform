@@ -4,6 +4,7 @@ import { addStockToWatchlist, fetchStocks, removeStockFromWatchlist } from "../S
 import { fetchWatchlistData } from "../Services/WatchlistService";
 import "./Stocks.css";
 import { useLivePrices } from "../context/PriceContext";
+import { toast } from "react-toastify";
 
 const PAGE_SIZE = 10;
 const WATCHLISTS = ["Watchlist 1", "Watchlist 2", "Watchlist 3", "Watchlist 4", "Watchlist 5"];
@@ -106,8 +107,10 @@ const Stocks = () => {
         setUpdatingList(watchlistName);
         setError("");
         try {
-            if (isAdded) await removeStockFromWatchlist(payload);
-            else await addStockToWatchlist(payload);
+            const response = isAdded
+                ? await removeStockFromWatchlist(payload)
+                : await addStockToWatchlist(payload);
+            toast.success(response?.message || (isAdded ? "Stock removed from watchlist." : "Stock added to watchlist."));
 
             const next = { ...selections };
             const updated = isAdded
@@ -120,7 +123,9 @@ const Stocks = () => {
             window.dispatchEvent(new Event("watchlist-selections-updated"));
             window.dispatchEvent(new CustomEvent("watchlist-updated", { detail: { name: watchlistName } }));
         } catch (requestError) {
-            setError(requestError?.response?.data?.message || "Could not update this watchlist.");
+            const message = requestError?.response?.data?.message || "Could not update this watchlist.";
+            setError(message);
+            toast.error(message);
         } finally {
             setUpdatingList("");
         }
