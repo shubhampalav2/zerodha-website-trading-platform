@@ -1,5 +1,5 @@
 export default class API_URLS {
-    dashboardServerBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:7000/api/v1/dashboard/";
+    dashboardServerBaseUrl = "https://zerodha-website-trading-platform.onrender.com/api/v1/dashboard/";
 
     //API Endpoints
     watchlist = "watchlist";
