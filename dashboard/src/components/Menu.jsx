@@ -102,7 +102,7 @@ const Menu = () => {
                     <Link className="logout" onClick={() => {
                         //clearing the localstorage
                         localStorage.clear();
-                        window.open("http://localhost:3000/signup", "_self");
+                        window.open("https://zerodha-website-trading-platform-51.vercel.app/signup", "_self");
                     }}>
                         Logout
                     </Link>

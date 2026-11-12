@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./ApiClient";
 import apiUrl from "./API_URLS";
 import { getAccessToken } from "../common/Storage";
 
