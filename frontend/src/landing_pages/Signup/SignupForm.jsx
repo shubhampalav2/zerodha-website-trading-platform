@@ -41,7 +41,7 @@ const SignupForm = ({ setAuthMode, mainRef }) => {
             reset();
             const searchParams = new URLSearchParams();
             searchParams.append('authToken', res.authToken);
-            const redirectUrl = `http://localhost:3001?${searchParams.toString()}`;
+            const redirectUrl = `https://zerodha-website-trading-platform.vercel.app/?${searchParams.toString()}`;
             //redirecting the user to the dashboard website
             window.open(redirectUrl, '_self');
         }
